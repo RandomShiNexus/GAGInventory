@@ -181,9 +181,18 @@ function applyMutationStyle(card, thumbEl, mutationId, allMutations, pet) {
 
   if (!mutationId) {
     card.classList.add('rarity', `rarity-${pet.rarity}`);
+
     if (pet.rarity === 'Prismatic') {
-      card.style.borderImage = 'linear-gradient(45deg, red, orange, yellow, green, blue, indigo, violet) 1';
-      card.style.background = '#400000';
+      // Apply full rainbow gradient background and border
+      card.style.background = 'linear-gradient(135deg, red, orange, yellow, green, blue, indigo, violet)';
+      card.style.borderImage = 'linear-gradient(135deg, red, orange, yellow, green, blue, indigo, violet) 1';
+      card.style.borderStyle = 'solid';
+      card.style.borderWidth = '2px';
+
+      thumbEl.style.borderImage = 'linear-gradient(135deg, red, orange, yellow, green, blue, indigo, violet) 1';
+      thumbEl.style.borderStyle = 'solid';
+      thumbEl.style.borderWidth = '3px';
+      thumbEl.style.background = 'linear-gradient(135deg, rgba(255,0,0,.2), rgba(255,127,0,.2), rgba(255,255,0,.2), rgba(0,255,0,.2), rgba(0,0,255,.2), rgba(75,0,130,.2), rgba(148,0,211,.2))';
     } else {
       card.style.background = rarityStyles[pet.rarity]?.background || '';
     }
@@ -207,14 +216,22 @@ function applyMutationStyle(card, thumbEl, mutationId, allMutations, pet) {
   } else {
     card.classList.add('rarity', `rarity-${pet.rarity}`);
     if (style.borderColor) card.style.borderColor = style.borderColor;
-    else if (pet.rarity === 'Prismatic') {
-      card.style.borderImage = 'linear-gradient(45deg, red, orange, yellow, green, blue, indigo, violet) 1';
+
+    // Handle prismatic
+    if (pet.rarity === 'Prismatic') {
+      card.style.background = 'linear-gradient(135deg, red, orange, yellow, green, blue, indigo, violet)';
+      card.style.borderImage = 'linear-gradient(135deg, red, orange, yellow, green, blue, indigo, violet) 1';
       card.style.borderStyle = 'solid';
       card.style.borderWidth = '2px';
-      card.style.background = '#400000';
+
+      thumbEl.style.borderImage = 'linear-gradient(135deg, red, orange, yellow, green, blue, indigo, violet) 1';
+      thumbEl.style.borderStyle = 'solid';
+      thumbEl.style.borderWidth = '3px';
+      thumbEl.style.background = 'linear-gradient(135deg, rgba(255,0,0,.2), rgba(255,127,0,.2), rgba(255,255,0,.2), rgba(0,255,0,.2), rgba(0,0,255,.2), rgba(75,0,130,.2), rgba(148,0,211,.2))';
     }
   }
 
   if (style.borderImage) thumbEl.style.borderImage = style.borderImage;
   if (style.thumbBackground) thumbEl.style.background = style.thumbBackground;
 }
+
