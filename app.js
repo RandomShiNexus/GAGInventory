@@ -6,26 +6,17 @@ import { Inventory } from './components/inventory.js';
 
 // Global rarity styles (contributors can tweak here)
 export const rarityStyles = {
-  Common:    { borderColor: '#808080',    background: '#d3d3d3' },
-  Uncommon:  { borderColor: '#008000',    background: '#90ee90' },
-  Rare:      { borderColor: '#0000ff',    background: '#add8e6' },
-  Legendary: { borderColor: '#ffd700',    background: '#fff8dc' },
-  Mythical:  { borderColor: '#800080',    background: '#dda0dd' },
-  Divine:    { borderColor: '#ff8c00',    background: '#ffe4b5' },
-  Prismatic: { borderColor: 'linear-gradient(45deg, red, orange, yellow, green, blue, indigo, violet)', background: 'linear-gradient(135deg, #f5e0f5, #e0f5f5, #f5f5e0)' }
+  Common:    { borderColor: '#808080', background: '#dcdcdc' },
+  Uncommon:  { borderColor: '#008000', background: '#90ee90' },
+  Rare:      { borderColor: '#0000ff', background: '#add8e6' },
+  Legendary: { borderColor: '#ffd700', background: '#fff8dc' },
+  Mythical:  { borderColor: '#800080', background: '#dda0dd' },
+  Divine:    { borderColor: '#ff8c00', background: '#ffe4b5' },
+  Prismatic: { borderColor: '#e0cfff', background: '#fcefff' },
 };
 
-// Updated rarity rank for sorting
-export const rarityRank = {
-  Common: 1,
-  Uncommon: 2,
-  Rare: 3,
-  Legendary: 4,
-  Mythical: 5,
-  Divine: 6,
-  Prismatic: 7
-};
-
+// Rarity ordering for sorting (low -> high)
+export const rarityRank = { Common: 1, Uncommon: 2, Rare: 3, Legendary: 4, Mythical: 5, Divine: 6, Prismatic: 7 };
 
 const DATA = {
   pets: [],
@@ -117,15 +108,11 @@ async function loadData() {
   DATA.pets = pets;
   DATA.mutations = mutations;
 
-  // Build pet lookup map
-  pets.forEach(pet => {
-    DATA.petMap.set(pet.id, pet);
-  });
+  pets.forEach(pet => DATA.petMap.set(pet.id, pet));
 
-  // Normalize mutation codes; allow short "code" in JSON to keep URLs tiny
   mutations.forEach((m, i) => {
     const id = m.id;
-    const code = (m.code && String(m.code)) || i.toString(36); // base36 fallback
+    const code = (m.code && String(m.code)) || i.toString(36);
     DATA.mutationMap.set(id, { ...m, code });
     DATA.mutationCodeToId.set(code, id);
   });
@@ -146,10 +133,7 @@ function renderPool(pets, mutations, inventory) {
         const pet = DATA.petMap.get(petId);
         inventory.add(petId, mutationId, pet);
       },
-      onSetMutation: (petId, mutationId) => {
-        // For pool cards, we don't store mutations unless they're in inventory
-        // This is just for preview purposes
-      }
+      onSetMutation: (petId, mutationId) => {}
     });
     frag.appendChild(card);
   });
@@ -163,11 +147,8 @@ function renderInventory(inventory) {
   const frag = document.createDocumentFragment();
   const items = inventory.items;
 
-  if (!items.length) {
-    UI.inventoryEmpty.classList.remove('hidden');
-  } else {
-    UI.inventoryEmpty.classList.add('hidden');
-  }
+  if (!items.length) UI.inventoryEmpty.classList.remove('hidden');
+  else UI.inventoryEmpty.classList.add('hidden');
 
   items.forEach(({ id, mutationId, pet, count }) => {
     const card = createPetCard({
@@ -175,21 +156,15 @@ function renderInventory(inventory) {
       mutations: DATA.mutations.map(m => DATA.mutationMap.get(m.id) || m),
       rarityStyles,
       isInventory: true,
-      count: count,
+      count,
       initialMutationId: mutationId,
-      onRemove: (petId) => { 
-        inventory.remove(petId); 
-      },
+      onRemove: (petId) => inventory.remove(petId),
       onAdd: (petId, mutationId) => {
         const pet = DATA.petMap.get(petId);
         inventory.add(petId, mutationId, pet);
       },
-      onSetMutation: (petId, mId) => { 
-        inventory.setMutation(petId, mId); 
-      },
-      onDelete: (petId) => {
-        inventory.deleteAll(petId);
-      }
+      onSetMutation: (petId, mId) => inventory.setMutation(petId, mId),
+      onDelete: (petId) => inventory.deleteAll(petId)
     });
     frag.appendChild(card);
   });
@@ -201,11 +176,8 @@ function renderInventoryFiltered(inventory, filteredItems) {
   UI.inventoryGrid.innerHTML = '';
   const frag = document.createDocumentFragment();
 
-  if (!filteredItems.length) {
-    UI.inventoryEmpty.classList.remove('hidden');
-  } else {
-    UI.inventoryEmpty.classList.add('hidden');
-  }
+  if (!filteredItems.length) UI.inventoryEmpty.classList.remove('hidden');
+  else UI.inventoryEmpty.classList.add('hidden');
 
   filteredItems.forEach(({ id, mutationId, pet, count }) => {
     const card = createPetCard({
@@ -213,21 +185,15 @@ function renderInventoryFiltered(inventory, filteredItems) {
       mutations: DATA.mutations.map(m => DATA.mutationMap.get(m.id) || m),
       rarityStyles,
       isInventory: true,
-      count: count,
+      count,
       initialMutationId: mutationId,
-      onRemove: (petId) => { 
-        inventory.remove(petId); 
-      },
+      onRemove: (petId) => inventory.remove(petId),
       onAdd: (petId, mutationId) => {
         const pet = DATA.petMap.get(petId);
         inventory.add(petId, mutationId, pet);
       },
-      onSetMutation: (petId, mId) => { 
-        inventory.setMutation(petId, mId); 
-      },
-      onDelete: (petId) => {
-        inventory.deleteAll(petId);
-      }
+      onSetMutation: (petId, mId) => inventory.setMutation(petId, mId),
+      onDelete: (petId) => inventory.deleteAll(petId)
     });
     frag.appendChild(card);
   });
@@ -236,35 +202,15 @@ function renderInventoryFiltered(inventory, filteredItems) {
 }
 
 /* ---------- URL Encoding / Decoding ---------- */
-/*
- URL hash format:
-   #inv=<entries>
-   entries = comma-separated tokens
-   token = id[:code][:count]
-   id = numeric pet id
-   code = short mutation code (from mutations.json "code" or auto-generated base36 index)
-   count = number of this pet (defaults to 1)
-
- Example:
-   #inv=1:r:3,2:g:1,5::2
-
- Rules:
-   - Order preserved (for nicer UX when sharing)
-   - Unknown mutation codes are ignored gracefully
-*/
 function currentShareUrl(items) {
   const entries = items.map(({ id, mutationId, count }) => {
     let token = String(id);
     const m = mutationId ? DATA.mutationMap.get(mutationId) : null;
     const code = m ? m.code : '';
-    
-    if (code || count > 1) {
-      token += ':' + (code || '');
-    }
-    if (count > 1) {
-      token += ':' + count;
-    }
-    
+
+    if (code || count > 1) token += ':' + (code || '');
+    if (count > 1) token += ':' + count;
+
     return token;
   }).join(',');
   const url = new URL(location.href);
@@ -285,10 +231,9 @@ function parseHashInventory() {
     const idStr = parts[0];
     const code = parts[1] || null;
     const countStr = parts[2] || '1';
-    
+
     const id = Number(idStr);
     const count = Number(countStr) || 1;
-    
     if (!Number.isFinite(id)) return;
 
     const pet = DATA.petMap.get(id);
@@ -306,7 +251,6 @@ function parseHashInventory() {
 
 function updateHashFromInventory(items) {
   const link = currentShareUrl(items);
-  // Replace without scrolling; only update hash portion
   const u = new URL(link);
   location.replace(`#${u.hash.slice(1)}`);
 }
@@ -325,6 +269,5 @@ function bindUI() {
   UI.shareBtn = document.getElementById('btn-share');
   UI.resetLink = document.getElementById('btn-reset');
 
-  // Export DATA for use in other modules
   window.PETS_DATA = DATA;
 }
