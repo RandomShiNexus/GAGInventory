@@ -5,8 +5,8 @@
     "code": "s",
     "style": {
       "borderColor": "#ffe6cc",
-      "background": "linear-gradient(135deg, #1a0d26, #3a1f4a, #6a3faf)",
-      "thumbBackground": "linear-gradient(135deg, #333366, #552299, #7744cc)"
+      "background": "repeating-linear-gradient(135deg, #1a0d26, #3a1f4a 15px, #6a3faf 30px)",
+      "thumbBackground": "repeating-linear-gradient(135deg, #333366, #552299 10px, #7744cc 20px)"
     },
     "overrideRarity": true
   },
@@ -16,8 +16,8 @@
     "code": "i",
     "style": {
       "borderColor": "#ffffff",
-      "background": "linear-gradient(135deg, #0a0a0a, #303030, #505050)",
-      "thumbBackground": "linear-gradient(135deg, #666666, #999999, #cccccc)"
+      "background": "repeating-radial-gradient(circle at center, #0a0a0a, #303030 10px, #505050 20px)",
+      "thumbBackground": "repeating-linear-gradient(45deg, #666666, #999999 10px, #cccccc 20px)"
     },
     "overrideRarity": true
   },
@@ -27,7 +27,7 @@
     "code": "f",
     "style": {
       "borderColor": "#66b3ff",
-      "background": "linear-gradient(135deg, #061222, #0d2a4a, #3399ff)",
+      "background": "repeating-linear-gradient(135deg, #061222, #0d2a4a 10px, #3399ff 30px)",
       "thumbBackground": "linear-gradient(135deg, #3399ff, #66b3ff)"
     },
     "overrideRarity": true
@@ -38,7 +38,7 @@
     "code": "w",
     "style": {
       "borderColor": "#66ccff",
-      "background": "repeating-linear-gradient(45deg, #0d1f2a, #0d1f2a 10px, #2277aa 20px)",
+      "background": "repeating-linear-gradient(45deg, #0d1f2a, #2277aa 20px, #0d1f2a 40px)",
       "thumbBackground": "linear-gradient(135deg, #3399cc, #66ccff)"
     },
     "overrideRarity": true
@@ -49,7 +49,7 @@
     "code": "g",
     "style": {
       "borderColor": "#FFD700",
-      "background": "linear-gradient(135deg, #2a2412, #3a2f11, #ffdc73)",
+      "background": "linear-gradient(135deg, #2a2412, #ffdc73 40%, #3a2f11 80%)",
       "thumbBackground": "linear-gradient(135deg, #fff3bf, #ffd700, #ffeab3)"
     },
     "overrideRarity": true
@@ -60,8 +60,8 @@
     "code": "m",
     "style": {
       "borderColor": "#ff9999",
-      "background": "linear-gradient(135deg, #1a0d0d, #3a1a1a, #cc3333)",
-      "thumbBackground": "linear-gradient(135deg, #cc6666, #ff9999)"
+      "background": "repeating-linear-gradient(135deg, #1a0d0d, #cc3333 10px, #3a1a1a 20px)",
+      "thumbBackground": "repeating-linear-gradient(135deg, #cc6666, #ff9999 10px)"
     },
     "overrideRarity": true
   },
@@ -71,7 +71,7 @@
     "code": "t",
     "style": {
       "borderColor": "#33cc33",
-      "background": "linear-gradient(135deg, #0d1a0d, #1a331a, #339933)",
+      "background": "repeating-linear-gradient(135deg, #0d1a0d, #339933 10px, #1a331a 20px)",
       "thumbBackground": "linear-gradient(135deg, #66cc66, #33cc33)"
     },
     "overrideRarity": true
@@ -82,8 +82,8 @@
     "code": "k",
     "style": {
       "borderColor": "#cccccc",
-      "background": "repeating-linear-gradient(45deg, #0d0d0d, #0d0d0d 10px, #555555 20px)",
-      "thumbBackground": "linear-gradient(135deg, #999999, #cccccc)"
+      "background": "repeating-linear-gradient(45deg, #0d0d0d, #555555 15px, #0d0d0d 30px)",
+      "thumbBackground": "repeating-linear-gradient(135deg, #999999, #cccccc 10px)"
     },
     "overrideRarity": true
   },
@@ -93,7 +93,7 @@
     "code": "d",
     "style": {
       "borderColor": "#ffff99",
-      "background": "radial-gradient(circle at top left, #666633, #999966, #cccc99)",
+      "background": "radial-gradient(circle at top left, #666633, #999966 40%, #cccc99 80%)",
       "thumbBackground": "radial-gradient(circle, #999966, #cccc99)"
     },
     "overrideRarity": true
@@ -104,7 +104,7 @@
     "code": "h",
     "style": {
       "borderColor": "#ffff33",
-      "background": "linear-gradient(45deg, #999900, #cccc00, #ffff33)",
+      "background": "repeating-linear-gradient(45deg, #999900, #ffff33 10px, #cccc00 20px)",
       "thumbBackground": "linear-gradient(45deg, #cccc00, #ffff33)"
     },
     "overrideRarity": true
@@ -126,7 +126,7 @@
     "code": "a",
     "style": {
       "borderColor": "#ff99ff",
-      "background": "linear-gradient(135deg, #1a0d1a, #3a1a3a, #990099)",
+      "background": "repeating-radial-gradient(circle, #1a0d1a, #3a1a3a 15px, #990099 30px)",
       "thumbBackground": "linear-gradient(135deg, #cc66cc, #ff99ff)"
     },
     "overrideRarity": true
@@ -137,7 +137,7 @@
     "code": "tr",
     "style": {
       "borderColor": "#6699cc",
-      "background": "radial-gradient(circle at center, #336699, #6699cc, #99ccff)",
+      "background": "radial-gradient(circle at center, #336699, #6699cc 40%, #99ccff 80%)",
       "thumbBackground": "radial-gradient(circle at center, #6699cc, #99ccff)"
     },
     "overrideRarity": true
@@ -148,7 +148,7 @@
     "code": "co",
     "style": {
       "borderColor": "#660066",
-      "background": "linear-gradient(135deg, #1a0d1a, #660066, #990099)",
+      "background": "repeating-linear-gradient(135deg, #1a0d1a, #660066 10px, #990099 20px)",
       "thumbBackground": "linear-gradient(135deg, #990099, #660066)"
     },
     "overrideRarity": true
@@ -159,7 +159,7 @@
     "code": "fr",
     "style": {
       "borderColor": "#cc3300",
-      "background": "linear-gradient(135deg, #331100, #cc3300, #ff6600)",
+      "background": "repeating-linear-gradient(135deg, #331100, #cc3300 10px, #ff6600 20px)",
       "thumbBackground": "linear-gradient(135deg, #ff6633, #cc3300)"
     },
     "overrideRarity": true
@@ -170,7 +170,7 @@
     "code": "ar",
     "style": {
       "borderColor": "#cc6699",
-      "background": "linear-gradient(135deg, #330d1a, #cc6699, #ff99cc)",
+      "background": "radial-gradient(circle at center, #330d1a, #cc6699 40%, #ff99cc 80%)",
       "thumbBackground": "linear-gradient(135deg, #ff99cc, #cc6699)"
     },
     "overrideRarity": true
@@ -181,7 +181,7 @@
     "code": "gb",
     "style": {
       "borderColor": "#996633",
-      "background": "linear-gradient(135deg, #331a0d, #996633, #cc9966)",
+      "background": "repeating-linear-gradient(135deg, #331a0d, #996633 10px, #cc9966 20px)",
       "thumbBackground": "linear-gradient(135deg, #cc9966, #996633)"
     },
     "overrideRarity": true
@@ -192,7 +192,7 @@
     "code": "si",
     "style": {
       "borderColor": "#999999",
-      "background": "linear-gradient(135deg, #1a1a1a, #999999, #cccccc)",
+      "background": "repeating-linear-gradient(135deg, #1a1a1a, #999999 10px, #cccccc 20px)",
       "thumbBackground": "linear-gradient(135deg, #cccccc, #999999)"
     },
     "overrideRarity": true
@@ -203,7 +203,7 @@
     "code": "gl",
     "style": {
       "borderColor": "#cc9900",
-      "background": "linear-gradient(135deg, #332a0d, #cc9900, #e6cc66)",
+      "background": "repeating-radial-gradient(circle at center, #332a0d, #cc9900 10px, #e6cc66 20px)",
       "thumbBackground": "linear-gradient(135deg, #e6cc66, #cc9900)"
     },
     "overrideRarity": true
@@ -214,7 +214,7 @@
     "code": "lu",
     "style": {
       "borderColor": "#66cccc",
-      "background": "linear-gradient(135deg, #0d1a1a, #66cccc, #99e6e6)",
+      "background": "repeating-linear-gradient(135deg, #0d1a1a, #66cccc 10px, #99e6e6 20px)",
       "thumbBackground": "linear-gradient(135deg, #99e6e6, #66cccc)"
     },
     "overrideRarity": true
