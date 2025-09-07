@@ -15,9 +15,8 @@
     "code": "r",
     "style": {
       "borderColor": "linear-gradient(45deg, red, orange, yellow, green, blue, indigo, violet)",
-      "background": "linear-gradient(135deg, #1a1f31, #1e2439, #242c46, #1a1f31)",
+      "background": "linear-gradient(135deg, #ffecf0, #fefbd8, #e0ffe0, #cff0ff, #f2e0ff, #ffe0f0)",
       "thumbBackground": "linear-gradient(45deg, red, orange, yellow, green, blue, indigo, violet)"
-    },
-    "overrideRarity": true
+    }
   }
 ]
