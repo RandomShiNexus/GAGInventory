@@ -1,25 +1,27 @@
-import { rarityStyles } from '../app.js';
+// Renders a single pet card and wires up interactions.
+import { rarityRank, rarityStyles } from '../app.js';
 
-// Renders a single pet card
 export function createPetCard(options) {
   const {
-    pet, mutations, rarityStyles,
-    isPool = false, isInventory = false,
-    count = 1, initialMutationId = null,
+    pet, mutations,
+    isPool = false,
+    isInventory = false,
+    count = 1,
+    initialMutationId = null,
     onAdd, onRemove, onSetMutation, onDelete
   } = options;
 
   const card = document.createElement('article');
   card.className = 'card';
+  card.dataset.petId = pet.id;
 
-  // Remove old rarity classes, then add new
-  card.classList.remove('rarity-Common','rarity-Uncommon','rarity-Rare','rarity-Legendary','rarity-Mythical','rarity-Divine','rarity-Prismatic');
+  // Base rarity styling
   card.classList.add('rarity', `rarity-${pet.rarity}`);
 
   const thumb = document.createElement('img');
   thumb.className = 'thumb';
   thumb.loading = 'lazy';
-  thumb.alt = pet.name;
+  thumb.alt = `${pet.name}`;
   thumb.src = pet.image;
 
   const name = document.createElement('div');
@@ -31,14 +33,18 @@ export function createPetCard(options) {
 
   const badge = document.createElement('span');
   badge.className = 'badge';
-  badge.innerHTML = `<span class="dot" style="background:${rarityColorFor(pet.rarity)}"></span> ${pet.rarity}`;
+  badge.innerHTML = `<span class="dot" style="background:${
+    rarityColorFor(pet.rarity)
+  }"></span> ${pet.rarity}`;
+
   meta.appendChild(badge);
 
+  // Controls for pool
   if (isPool) {
     const addBtn = document.createElement('button');
     addBtn.className = 'pill add-btn';
     addBtn.innerHTML = '<span class="plus">+</span> Add';
-    addBtn.addEventListener('click', e => {
+    addBtn.addEventListener('click', (e) => {
       e.stopPropagation();
       const mutationId = getCurrentMutationId(card);
       onAdd?.(pet.id, mutationId);
@@ -46,41 +52,52 @@ export function createPetCard(options) {
     meta.appendChild(addBtn);
   }
 
+  // Controls for inventory
   if (isInventory) {
     const controls = document.createElement('div');
     controls.className = 'inventory-controls';
-
+    
     const minusBtn = document.createElement('button');
     minusBtn.className = 'pill minus-btn';
     minusBtn.innerHTML = '<span class="minus">−</span>';
-    minusBtn.addEventListener('click', e => { e.stopPropagation(); onRemove?.(pet.id); });
-
+    minusBtn.addEventListener('click', (e) => {
+      e.stopPropagation();
+      onRemove?.(pet.id);
+    });
+    
     const countSpan = document.createElement('span');
     countSpan.className = 'count';
     countSpan.textContent = count;
-
+    
     const plusBtn = document.createElement('button');
     plusBtn.className = 'pill plus-btn';
     plusBtn.innerHTML = '<span class="plus">+</span>';
-    plusBtn.addEventListener('click', e => {
+    plusBtn.addEventListener('click', (e) => {
       e.stopPropagation();
       const mutationId = getCurrentMutationId(card);
       onAdd?.(pet.id, mutationId);
     });
-
+    
     const deleteBtn = document.createElement('button');
     deleteBtn.className = 'pill delete-btn';
     deleteBtn.textContent = 'Delete';
-    deleteBtn.addEventListener('click', e => { e.stopPropagation(); onDelete?.(pet.id); });
-
-    controls.append(minusBtn, countSpan, plusBtn, deleteBtn);
+    deleteBtn.addEventListener('click', (e) => {
+      e.stopPropagation();
+      onDelete?.(pet.id);
+    });
+    
+    controls.appendChild(minusBtn);
+    controls.appendChild(countSpan);
+    controls.appendChild(plusBtn);
+    controls.appendChild(deleteBtn);
     meta.appendChild(controls);
   }
 
+  // Mutation dropdown
   const mutationRow = createMutationDropdown({
     currentId: initialMutationId,
     mutations,
-    onChange: mutationId => {
+    onChange: (mutationId) => {
       onSetMutation?.(pet.id, mutationId);
       applyMutationStyle(card, thumb, mutationId, mutations, pet);
     }
@@ -90,8 +107,12 @@ export function createPetCard(options) {
   rowTop.className = 'row';
   rowTop.appendChild(name);
 
-  card.append(thumb, rowTop, meta, mutationRow);
+  card.appendChild(thumb);
+  card.appendChild(rowTop);
+  card.appendChild(meta);
+  card.appendChild(mutationRow);
 
+  // Apply initial mutation styling if present
   applyMutationStyle(card, thumb, initialMutationId, mutations, pet);
 
   return card;
@@ -100,20 +121,20 @@ export function createPetCard(options) {
 function createMutationDropdown({ currentId = null, mutations = [], onChange }) {
   const wrap = document.createElement('div');
   wrap.className = 'mutation-selector';
-
+  
   const label = document.createElement('label');
   label.textContent = 'Mutation:';
   label.className = 'mutation-label';
-
+  
   const select = document.createElement('select');
   select.className = 'mutation-select';
-
+  
   const noneOption = document.createElement('option');
   noneOption.value = '';
   noneOption.textContent = 'No Mutation';
   if (!currentId) noneOption.selected = true;
   select.appendChild(noneOption);
-
+  
   mutations.forEach(m => {
     const option = document.createElement('option');
     option.value = m.id;
@@ -121,9 +142,15 @@ function createMutationDropdown({ currentId = null, mutations = [], onChange }) 
     if (m.id === currentId) option.selected = true;
     select.appendChild(option);
   });
-
-  select.addEventListener('change', e => onChange?.(e.target.value || null));
-  wrap.append(label, select);
+  
+  select.addEventListener('change', (e) => {
+    const mutationId = e.target.value || null;
+    onChange?.(mutationId);
+  });
+  
+  wrap.appendChild(label);
+  wrap.appendChild(select);
+  
   return wrap;
 }
 
@@ -140,29 +167,32 @@ function rarityColorFor(rarity) {
     Legendary: 'var(--r-legendary)',
     Mythical: 'var(--r-mythical)',
     Divine: 'var(--r-divine)',
-    Prismatic: 'var(--r-prismatic)'
+    Prismatic: 'linear-gradient(45deg, red, orange, yellow, green, blue, indigo, violet)'
   };
   return map[rarity] || 'var(--r-common)';
 }
 
 function applyMutationStyle(card, thumbEl, mutationId, allMutations, pet) {
-  // Clear inline styles
-  card.style.borderColor = '';
-  card.style.background = '';
+  // Reset
   thumbEl.style.borderImage = '';
   thumbEl.style.background = '';
+  card.style.borderColor = '';
+  card.style.background = '';
 
-  // Remove all previous rarity classes
-  card.classList.remove('rarity-Common','rarity-Uncommon','rarity-Rare','rarity-Legendary','rarity-Mythical','rarity-Divine','rarity-Prismatic');
+  if (!mutationId) {
+    card.classList.add('rarity', `rarity-${pet.rarity}`);
+    if (pet.rarity === 'Prismatic') {
+      card.style.borderImage = 'linear-gradient(45deg, red, orange, yellow, green, blue, indigo, violet) 1';
+      card.style.background = '#400000';
+    } else {
+      card.style.background = rarityStyles[pet.rarity]?.background || '';
+    }
+    return;
+  }
 
   const m = allMutations.find(x => x.id === mutationId);
-
-  if (!mutationId || !m) {
-    // Apply normal rarity
+  if (!m) {
     card.classList.add('rarity', `rarity-${pet.rarity}`);
-    const style = rarityStyles[pet.rarity] || {};
-    card.style.borderColor = style.borderColor || 'var(--card-border)';
-    card.style.background = style.background || 'var(--card-bg)';
     return;
   }
 
@@ -171,11 +201,18 @@ function applyMutationStyle(card, thumbEl, mutationId, allMutations, pet) {
   if (style.background) card.style.background = style.background;
 
   if (m.overrideRarity) {
+    card.classList.remove('rarity', `rarity-${pet.rarity}`);
     if (style.borderColor) card.style.borderColor = style.borderColor;
     else card.style.borderColor = '#888';
   } else {
     card.classList.add('rarity', `rarity-${pet.rarity}`);
     if (style.borderColor) card.style.borderColor = style.borderColor;
+    else if (pet.rarity === 'Prismatic') {
+      card.style.borderImage = 'linear-gradient(45deg, red, orange, yellow, green, blue, indigo, violet) 1';
+      card.style.borderStyle = 'solid';
+      card.style.borderWidth = '2px';
+      card.style.background = '#400000';
+    }
   }
 
   if (style.borderImage) thumbEl.style.borderImage = style.borderImage;
