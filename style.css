@@ -118,6 +118,27 @@ input::placeholder{color:#7f8aa3}
   outline:none; border-color:var(--accent);
 }
 
+/* Stats inputs for inventory */
+.stats-inputs{
+  display:flex; gap:8px; margin-top:8px;
+}
+.stat-group{
+  flex:1; display:flex; flex-direction:column; gap:3px;
+}
+.stat-label{
+  font-size:11px; color:var(--muted); font-weight:500;
+}
+.stat-input{
+  width:100%; border:1px solid var(--card-border); background:#141a26; color:var(--text);
+  padding:6px 8px; border-radius:6px; font-size:12px;
+}
+.stat-input:focus{
+  outline:none; border-color:var(--accent);
+}
+.stat-input::placeholder{
+  color:#7f8aa3;
+}
+
 /* Inventory controls */
 .inventory-controls{
   display:flex; gap:6px; align-items:center;
@@ -139,6 +160,32 @@ input::placeholder{color:#7f8aa3}
 
 .pill .plus, .pill .minus{
   font-weight:bold; font-size:14px; line-height:1;
+}
+
+/* Animation keyframes */
+@keyframes popIn {
+  0% {
+    opacity: 0;
+    transform: scale(0.8) translateY(20px);
+  }
+  50% {
+    transform: scale(1.05) translateY(-5px);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+  }
+}
+
+@keyframes fadeOut {
+  0% {
+    opacity: 1;
+    transform: scale(1);
+  }
+  100% {
+    opacity: 0;
+    transform: scale(0.9);
+  }
 }
 
 .badge{
