@@ -101,13 +101,45 @@ input::placeholder{color:#7f8aa3}
 .card .name{ font-weight:600; line-height:1.2 }
 .card .meta{ color:var(--muted); font-size:12px; display:flex; gap:6px; align-items:center; justify-content:space-between }
 .card .row{ display:flex; gap:8px; align-items:center; justify-content:space-between }
-.card .mutations{ display:flex; gap:6px; flex-wrap:wrap }
-.card .pill{
-  border:1px solid var(--card-border); background:#121828; padding:6px 8px; border-radius:999px;
-  font-size:12px; cursor:pointer; user-select:none;
+
+/* New mutation dropdown styles */
+.mutation-selector{
+  display:flex; flex-direction:column; gap:4px; margin-top:6px;
 }
-.card .pill.active{ border-color:var(--accent); color:#fff }
-.card .remove{ color:#ff6b6b; background:#2a1b1b; border-color:#4b2d2d }
+.mutation-label{
+  font-size:12px; color:var(--muted); font-weight:500;
+}
+.mutation-select{
+  width:100%; min-width:auto;
+  border:1px solid var(--card-border); background:#141a26; color:var(--text);
+  padding:6px 8px; border-radius:6px; font-size:12px;
+}
+.mutation-select:focus{
+  outline:none; border-color:var(--accent);
+}
+
+/* Inventory controls */
+.inventory-controls{
+  display:flex; gap:6px; align-items:center;
+}
+.inventory-controls .count{
+  min-width:20px; text-align:center; font-weight:600; color:var(--accent);
+}
+
+/* Button variants */
+.pill{
+  border:1px solid var(--card-border); background:#121828; padding:6px 8px; border-radius:999px;
+  font-size:12px; cursor:pointer; user-select:none; display:inline-flex; align-items:center; gap:4px;
+}
+.pill:hover{ filter:brightness(1.1) }
+.pill.add-btn{ background:#1a2e1a; border-color:#2d4a2d; color:#4ade80 }
+.pill.plus-btn{ background:#1a2e1a; border-color:#2d4a2d; color:#4ade80; padding:4px 8px }
+.pill.minus-btn{ background:#2e1a1a; border-color:#4a2d2d; color:#f87171; padding:4px 8px }
+.pill.delete-btn{ background:#2a1b1b; border-color:#4b2d2d; color:#ff6b6b }
+
+.pill .plus, .pill .minus{
+  font-weight:bold; font-size:14px; line-height:1;
+}
 
 .badge{
   display:inline-flex; align-items:center; gap:6px; font-size:12px;
