@@ -1,114 +1,67 @@
-// Enhanced inventory store with individual pet instances, using in-memory state.
-// (No localStorage needed because state lives in the shareable URL.)
+// Builds the mutation selector row with toggle pills.
+// Emits a custom "mutationchange" event on the card when a mutation is changed.
 
-export class Inventory {
-  constructor() {
-    this.instances = []; // [{ id, petId, mutationId, pet, weight, age }]
-    this.nextId = 1;
-    this.onChange = null;
-  }
+export function buildMutationControls({ currentId = null, mutations = [], onChange }) {
+  const wrap = document.createElement('div');
+  wrap.className = 'mutations';
 
-  replaceAll(entries) {
-    this.instances = entries.map(entry => ({
-      id: this.nextId++,
-      petId: entry.petId,
-      mutationId: entry.mutationId,
-      pet: entry.pet,
-      weight: entry.weight || null,
-      age: entry.age || null
-    }));
-    this._emit();
-  }
+  // "None" pill
+  const none = document.createElement('button');
+  none.className = 'pill' + (currentId ? '' : ' active');
+  none.textContent = 'No Mutation';
+  none.setAttribute('data-mutation-id', '');
+  none.addEventListener('click', (e) => {
+    e.stopPropagation();
+    selectMutation(wrap, '');
+    onChange?.(null);
+    dispatchMutationChange(wrap, null);
+  });
+  wrap.appendChild(none);
 
-  clear()// Enhanced inventory store with counts, using in-memory state.
-// (No localStorage needed because state lives in the shareable URL.)
+  mutations.forEach(m => {
+    const pill = document.createElement('button');
+    pill.className = 'pill';
+    pill.setAttribute('title', m.name);
+    pill.setAttribute('data-mutation-id', m.id);
+    pill.innerHTML = `<span class="icon" style="${inlineIconStyle(m)}"></span>${m.name}`;
+    if (m.id === currentId) pill.classList.add('active');
 
-export class Inventory {
-  constructor() {
-    this.items = []; // [{ id, mutationId, pet, count }]
-    this.onChange = null;
-  }
-
-  replaceAll(entries) {
-    this.items = entries.slice();
-    this._emit();
-  }
-
-  clear() {
-    this.items = [];
-    this._emit();
-  }
-
-  has(id) {
-    return this.items.some(x => x.id === id);
-  }
-
-  getCount(id) {
-    const item = this.items.find(x => x.id === id);
-    return item ? item.count : 0;
-  }
-
-  getMutation(id) {
-    return (this.items.find(x => x.id === id) || {}).mutationId || null;
-  }
-
-  add(id, mutationId, pet) {
-    const existing = this.items.find(x => x.id === id);
-    if (existing) {
-      existing.count += 1;
-      // Update mutation if provided
-      if (mutationId !== undefined) {
-        existing.mutationId = mutationId;
+    pill.addEventListener('click', (e) => {
+      e.stopPropagation();
+      const isActive = pill.classList.contains('active');
+      // Toggle behavior: clicking active mutation -> clears it
+      if (isActive) {
+        selectMutation(wrap, '');
+        onChange?.(null);
+        dispatchMutationChange(wrap, null);
+      } else {
+        selectMutation(wrap, m.id);
+        onChange?.(m.id);
+        dispatchMutationChange(wrap, m.id);
       }
-    } else {
-      const item = { 
-        id, 
-        mutationId: mutationId || null, 
-        pet: pet || this._lookupPet(id),
-        count: 1 
-      };
-      this.items.push(item);
-    }
-    this._emit();
-  }
+    });
+    wrap.appendChild(pill);
+  });
 
-  remove(id) {
-    const existing = this.items.find(x => x.id === id);
-    if (!existing) return;
-    
-    if (existing.count > 1) {
-      existing.count -= 1;
-    } else {
-      this.items = this.items.filter(x => x.id !== id);
-    }
-    this._emit();
-  }
+  return wrap;
+}
 
-  deleteAll(id) {
-    this.items = this.items.filter(x => x.id !== id);
-    this._emit();
-  }
+function selectMutation(container, id) {
+  container.querySelectorAll('.pill').forEach(el => {
+    const mid = el.getAttribute('data-mutation-id');
+    el.classList.toggle('active', mid === id);
+  });
+}
 
-  setMutation(id, mutationId) {
-    const item = this.items.find(x => x.id === id);
-    if (item) {
-      item.mutationId = mutationId || null;
-      this._emit();
-    }
-  }
+function inlineIconStyle(mutation) {
+  const s = mutation.style || {};
+  const bg = s.background || s.thumbBackground || '#333';
+  const border = s.borderColor ? `border-color:${s.borderColor};` : '';
+  return `background:${bg};${border}`;
+}
 
-  _lookupPet(id) {
-    // Try to get pet from global data if available
-    if (window.PETS_DATA && window.PETS_DATA.petMap) {
-      return window.PETS_DATA.petMap.get(id);
-    }
-    // Fallback
-    return { id, name: `Pet ${id}`, rarity: 'Common', image: '' };
-  }
-
-  _emit() {
-    if (this.onChange) {
-      this.onChange();
-    }
-  }
+function dispatchMutationChange(container, mutationId) {
+  const card = container.closest('.card');
+  if (!card) return;
+  card.dispatchEvent(new CustomEvent('mutationchange', { detail: { mutationId } }));
 }
