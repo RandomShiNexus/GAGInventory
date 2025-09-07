@@ -20,7 +20,8 @@ const DATA = {
   pets: [],
   mutations: [],
   mutationMap: new Map(),   // id -> mutation object
-  mutationCodeToId: new Map() // short code -> id
+  mutationCodeToId: new Map(), // short code -> id
+  petMap: new Map()         // id -> pet object for quick lookup
 };
 
 const UI = {
@@ -58,7 +59,9 @@ export async function initApp() {
     poolGrid: UI.poolGrid,
     inventoryGrid: UI.inventoryGrid,
     poolEmpty: UI.poolEmpty,
-    inventoryEmpty: UI.inventoryEmpty
+    inventoryEmpty: UI.inventoryEmpty,
+    onPoolFilter: (pets) => renderPool(pets, DATA.mutations, inventory),
+    onInventoryFilter: (items) => renderInventoryFiltered(inventory, items)
   });
 
   // Share link (copies to clipboard)
@@ -79,7 +82,6 @@ export async function initApp() {
     inventory.clear();
     updateHashFromInventory([]);
     renderInventory(inventory);
-    // Re-render pool to remove selected state
     renderPool(DATA.pets, DATA.mutations, inventory);
   });
 
@@ -87,8 +89,10 @@ export async function initApp() {
   inventory.onChange = () => {
     updateHashFromInventory(inventory.items);
     renderInventory(inventory);
-    // Mirror selected states in pool
-    mirrorSelectionsInPool(inventory);
+    // Update search system with new inventory data
+    if (window.updateSearchInventoryRef) {
+      window.updateSearchInventoryRef(inventory);
+    }
   };
 }
 
@@ -101,6 +105,11 @@ async function loadData() {
 
   DATA.pets = pets;
   DATA.mutations = mutations;
+
+  // Build pet lookup map
+  pets.forEach(pet => {
+    DATA.petMap.set(pet.id, pet);
+  });
 
   // Normalize mutation codes; allow short "code" in JSON to keep URLs tiny
   mutations.forEach((m, i) => {
@@ -121,15 +130,14 @@ function renderPool(pets, mutations, inventory) {
       pet,
       mutations: DATA.mutations.map(m => DATA.mutationMap.get(m.id) || m),
       rarityStyles,
-      selected: inventory.has(pet.id),
-      initialMutationId: inventory.getMutation(pet.id),
-      onToggle: (petId) => {
-        // Toggle add/remove
-        if (inventory.has(petId)) inventory.remove(petId);
-        else inventory.add(petId, null);
+      isPool: true,
+      onAdd: (petId, mutationId = null) => {
+        const pet = DATA.petMap.get(petId);
+        inventory.add(petId, mutationId, pet);
       },
       onSetMutation: (petId, mutationId) => {
-        inventory.setMutation(petId, mutationId);
+        // For pool cards, we don't store mutations unless they're in inventory
+        // This is just for preview purposes
       }
     });
     frag.appendChild(card);
@@ -150,17 +158,27 @@ function renderInventory(inventory) {
     UI.inventoryEmpty.classList.add('hidden');
   }
 
-  items.forEach(({ id, mutationId, pet }) => {
+  items.forEach(({ id, mutationId, pet, count }) => {
     const card = createPetCard({
       pet,
       mutations: DATA.mutations.map(m => DATA.mutationMap.get(m.id) || m),
       rarityStyles,
-      selected: true,
+      isInventory: true,
+      count: count,
       initialMutationId: mutationId,
-      compact: false,
-      onToggle: () => { inventory.remove(id); },
-      onSetMutation: (petId, mId) => { inventory.setMutation(petId, mId); },
-      isInventory: true
+      onRemove: (petId) => { 
+        inventory.remove(petId); 
+      },
+      onAdd: (petId, mutationId) => {
+        const pet = DATA.petMap.get(petId);
+        inventory.add(petId, mutationId, pet);
+      },
+      onSetMutation: (petId, mId) => { 
+        inventory.setMutation(petId, mId); 
+      },
+      onDelete: (petId) => {
+        inventory.deleteAll(petId);
+      }
     });
     frag.appendChild(card);
   });
@@ -168,21 +186,42 @@ function renderInventory(inventory) {
   UI.inventoryGrid.appendChild(frag);
 }
 
-/* Keep pool selection visuals in sync after inventory change without full re-render */
-function mirrorSelectionsInPool(inventory) {
-  UI.poolGrid.querySelectorAll('[data-pet-id]').forEach(card => {
-    const petId = Number(card.getAttribute('data-pet-id'));
-    const selected = inventory.has(petId);
-    card.classList.toggle('selected', selected);
+function renderInventoryFiltered(inventory, filteredItems) {
+  UI.inventoryGrid.innerHTML = '';
+  const frag = document.createDocumentFragment();
 
-    const mutationId = inventory.getMutation(petId);
-    card.setAttribute('data-mutation-id', mutationId || '');
-    // Update visible mutation pill states
-    card.querySelectorAll('.pill').forEach(p => {
-      const mid = p.getAttribute('data-mutation-id');
-      p.classList.toggle('active', mid === mutationId);
+  if (!filteredItems.length) {
+    UI.inventoryEmpty.classList.remove('hidden');
+  } else {
+    UI.inventoryEmpty.classList.add('hidden');
+  }
+
+  filteredItems.forEach(({ id, mutationId, pet, count }) => {
+    const card = createPetCard({
+      pet,
+      mutations: DATA.mutations.map(m => DATA.mutationMap.get(m.id) || m),
+      rarityStyles,
+      isInventory: true,
+      count: count,
+      initialMutationId: mutationId,
+      onRemove: (petId) => { 
+        inventory.remove(petId); 
+      },
+      onAdd: (petId, mutationId) => {
+        const pet = DATA.petMap.get(petId);
+        inventory.add(petId, mutationId, pet);
+      },
+      onSetMutation: (petId, mId) => { 
+        inventory.setMutation(petId, mId); 
+      },
+      onDelete: (petId) => {
+        inventory.deleteAll(petId);
+      }
     });
+    frag.appendChild(card);
   });
+
+  UI.inventoryGrid.appendChild(frag);
 }
 
 /* ---------- URL Encoding / Decoding ---------- */
@@ -190,23 +229,32 @@ function mirrorSelectionsInPool(inventory) {
  URL hash format:
    #inv=<entries>
    entries = comma-separated tokens
-   token = id[:code]
+   token = id[:code][:count]
    id = numeric pet id
    code = short mutation code (from mutations.json "code" or auto-generated base36 index)
+   count = number of this pet (defaults to 1)
 
  Example:
-   #inv=1:r,2,5:g
+   #inv=1:r:3,2:g:1,5::2
 
  Rules:
    - Order preserved (for nicer UX when sharing)
    - Unknown mutation codes are ignored gracefully
 */
 function currentShareUrl(items) {
-  const entries = items.map(({ id, mutationId }) => {
-    if (!mutationId) return String(id);
-    const m = DATA.mutationMap.get(mutationId);
-    if (!m) return String(id);
-    return `${id}:${m.code}`;
+  const entries = items.map(({ id, mutationId, count }) => {
+    let token = String(id);
+    const m = mutationId ? DATA.mutationMap.get(mutationId) : null;
+    const code = m ? m.code : '';
+    
+    if (code || count > 1) {
+      token += ':' + (code || '');
+    }
+    if (count > 1) {
+      token += ':' + count;
+    }
+    
+    return token;
   }).join(',');
   const url = new URL(location.href);
   url.hash = `inv=${entries}`;
@@ -222,11 +270,17 @@ function parseHashInventory() {
 
   const out = [];
   tokens.forEach(tok => {
-    const [idStr, code] = tok.split(':');
+    const parts = tok.split(':');
+    const idStr = parts[0];
+    const code = parts[1] || null;
+    const countStr = parts[2] || '1';
+    
     const id = Number(idStr);
+    const count = Number(countStr) || 1;
+    
     if (!Number.isFinite(id)) return;
 
-    const pet = DATA.pets.find(p => p.id === id);
+    const pet = DATA.petMap.get(id);
     if (!pet) return;
 
     let mutationId = null;
@@ -234,7 +288,7 @@ function parseHashInventory() {
       const mid = DATA.mutationCodeToId.get(code);
       if (mid) mutationId = mid;
     }
-    out.push({ id, mutationId, pet });
+    out.push({ id, mutationId, pet, count });
   });
   return out;
 }
@@ -259,4 +313,7 @@ function bindUI() {
 
   UI.shareBtn = document.getElementById('btn-share');
   UI.resetLink = document.getElementById('btn-reset');
+
+  // Export DATA for use in other modules
+  window.PETS_DATA = DATA;
 }
