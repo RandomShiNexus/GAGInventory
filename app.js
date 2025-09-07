@@ -64,13 +64,6 @@ export async function initApp() {
     onInventoryFilter: (items) => renderInventoryFiltered(inventory, items)
   });
 
-  // Make sure initial view is set correctly
-  const view = UI.viewSelect.value;
-  document.getElementById('pool-panel').style.display = 
-    (view === 'inventory') ? 'none' : '';
-  document.getElementById('inventory-panel').style.display = 
-    (view === 'pool') ? 'none' : '';
-
   // Share link (copies to clipboard)
   UI.shareBtn.addEventListener('click', async () => {
     const link = currentShareUrl(inventory.items);
