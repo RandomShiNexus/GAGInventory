@@ -42,13 +42,13 @@ export function attachSearchAndSort({
 
     // Filter and sort inventory
     if (view !== 'pool' && originalInventory) {
-      let filteredItems = originalInventory.items.filter(item => {
-        const name = item.pet.name.toLowerCase();
+      let filteredInstances = originalInventory.instances.filter(instance => {
+        const name = instance.pet.name.toLowerCase();
         return !query || name.includes(query);
       });
       
-      filteredItems = sortInventoryItems(filteredItems, sortKey);
-      onInventoryFilter?.(filteredItems);
+      filteredInstances = sortInventoryItems(filteredInstances, sortKey);
+      onInventoryFilter?.(filteredInstances);
     }
   };
 
