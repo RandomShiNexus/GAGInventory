@@ -1,22 +1,20 @@
 // Renders a single pet card and wires up interactions.
 import { rarityRank } from '../app.js';
-import { buildMutationControls } from './mutationSelector.js';
 
 export function createPetCard(options) {
   const {
     pet, mutations, rarityStyles,
-    selected = false,
+    isPool = false,
+    isInventory = false,
+    count = 1,
     initialMutationId = null,
-    onToggle, onSetMutation,
-    compact = false,
-    isInventory = false
+    onAdd, onRemove, onSetMutation, onDelete
   } = options;
 
   const card = document.createElement('article');
   card.className = 'card';
   card.dataset.petId = pet.id;
   card.setAttribute('data-pet-id', pet.id);
-  if (selected) card.classList.add('selected');
 
   // Base rarity styling (will be overridden by mutation style when applicable)
   card.classList.add('rarity', `rarity-${pet.rarity}`);
@@ -40,24 +38,69 @@ export function createPetCard(options) {
     rarityColorFor(pet.rarity)
   }"></span> ${pet.rarity}`;
 
-  const addRemove = document.createElement('button');
-  addRemove.className = 'pill';
-  addRemove.textContent = selected ? 'Remove' : 'Add';
-  if (selected) addRemove.classList.add('remove');
-
-  addRemove.addEventListener('click', (e) => {
-    e.stopPropagation();
-    onToggle?.(pet.id);
-  });
-
   meta.appendChild(badge);
-  meta.appendChild(addRemove);
 
-  // Mutation controls
-  const mutationsRow = buildMutationControls({
+  // Different controls for pool vs inventory
+  if (isPool) {
+    const addBtn = document.createElement('button');
+    addBtn.className = 'pill add-btn';
+    addBtn.innerHTML = '<span class="plus">+</span> Add';
+    addBtn.addEventListener('click', (e) => {
+      e.stopPropagation();
+      const mutationId = getCurrentMutationId(card);
+      onAdd?.(pet.id, mutationId);
+    });
+    meta.appendChild(addBtn);
+  }
+
+  if (isInventory) {
+    const controls = document.createElement('div');
+    controls.className = 'inventory-controls';
+    
+    const minusBtn = document.createElement('button');
+    minusBtn.className = 'pill minus-btn';
+    minusBtn.innerHTML = '<span class="minus">−</span>';
+    minusBtn.addEventListener('click', (e) => {
+      e.stopPropagation();
+      onRemove?.(pet.id);
+    });
+    
+    const countSpan = document.createElement('span');
+    countSpan.className = 'count';
+    countSpan.textContent = count;
+    
+    const plusBtn = document.createElement('button');
+    plusBtn.className = 'pill plus-btn';
+    plusBtn.innerHTML = '<span class="plus">+</span>';
+    plusBtn.addEventListener('click', (e) => {
+      e.stopPropagation();
+      const mutationId = getCurrentMutationId(card);
+      onAdd?.(pet.id, mutationId);
+    });
+    
+    const deleteBtn = document.createElement('button');
+    deleteBtn.className = 'pill delete-btn';
+    deleteBtn.textContent = 'Delete';
+    deleteBtn.addEventListener('click', (e) => {
+      e.stopPropagation();
+      onDelete?.(pet.id);
+    });
+    
+    controls.appendChild(minusBtn);
+    controls.appendChild(countSpan);
+    controls.appendChild(plusBtn);
+    controls.appendChild(deleteBtn);
+    meta.appendChild(controls);
+  }
+
+  // Mutation dropdown
+  const mutationRow = createMutationDropdown({
     currentId: initialMutationId,
     mutations,
-    onChange: (mutationId) => onSetMutation?.(pet.id, mutationId)
+    onChange: (mutationId) => {
+      onSetMutation?.(pet.id, mutationId);
+      applyMutationStyle(card, thumb, mutationId, mutations, pet);
+    }
   });
 
   const rowTop = document.createElement('div');
@@ -67,25 +110,55 @@ export function createPetCard(options) {
   card.appendChild(thumb);
   card.appendChild(rowTop);
   card.appendChild(meta);
-  card.appendChild(mutationsRow);
-
-  // Clicking card toggles selection (but not when clicking a mutation pill)
-  card.addEventListener('click', (e) => {
-    const t = e.target;
-    if (t.closest('.mutations')) return;
-    onToggle?.(pet.id);
-  });
+  card.appendChild(mutationRow);
 
   // Apply initial mutation styling if present
   applyMutationStyle(card, thumb, initialMutationId, mutations, pet);
 
-  // Observe mutation changes to re-style thumb/border without re-render
-  card.addEventListener('mutationchange', (e) => {
-    const mutationId = e.detail?.mutationId || null;
-    applyMutationStyle(card, thumb, mutationId, mutations, pet);
-  });
-
   return card;
+}
+
+function createMutationDropdown({ currentId = null, mutations = [], onChange }) {
+  const wrap = document.createElement('div');
+  wrap.className = 'mutation-selector';
+  
+  const label = document.createElement('label');
+  label.textContent = 'Mutation:';
+  label.className = 'mutation-label';
+  
+  const select = document.createElement('select');
+  select.className = 'mutation-select';
+  
+  // Add "No Mutation" option
+  const noneOption = document.createElement('option');
+  noneOption.value = '';
+  noneOption.textContent = 'No Mutation';
+  if (!currentId) noneOption.selected = true;
+  select.appendChild(noneOption);
+  
+  // Add mutation options
+  mutations.forEach(m => {
+    const option = document.createElement('option');
+    option.value = m.id;
+    option.textContent = m.name;
+    if (m.id === currentId) option.selected = true;
+    select.appendChild(option);
+  });
+  
+  select.addEventListener('change', (e) => {
+    const mutationId = e.target.value || null;
+    onChange?.(mutationId);
+  });
+  
+  wrap.appendChild(label);
+  wrap.appendChild(select);
+  
+  return wrap;
+}
+
+function getCurrentMutationId(card) {
+  const select = card.querySelector('.mutation-select');
+  return select ? (select.value || null) : null;
 }
 
 function rarityColorFor(rarity) {
@@ -110,10 +183,17 @@ function applyMutationStyle(card, thumbEl, mutationId, allMutations, pet) {
   card.style.borderColor = '';
   card.style.background = '';
 
-  if (!mutationId) return;
+  if (!mutationId) {
+    // Restore rarity styling
+    card.classList.add('rarity', `rarity-${pet.rarity}`);
+    return;
+  }
 
   const m = allMutations.find(x => x.id === mutationId);
-  if (!m) return;
+  if (!m) {
+    card.classList.add('rarity', `rarity-${pet.rarity}`);
+    return;
+  }
 
   const style = m.style || {};
 
