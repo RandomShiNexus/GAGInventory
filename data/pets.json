@@ -1,0 +1,32 @@
+[
+  {
+    "id": 1,
+    "name": "Divine Dog",
+    "image": "assets/pets/divine-dog.png",
+    "rarity": "Divine"
+  },
+  {
+    "id": 2,
+    "name": "Legendary Fox",
+    "image": "assets/pets/legendary-fox.png",
+    "rarity": "Legendary"
+  },
+  {
+    "id": 3,
+    "name": "Rare Cat",
+    "image": "assets/pets/rare-cat.png",
+    "rarity": "Rare"
+  },
+  {
+    "id": 4,
+    "name": "Uncommon Duck",
+    "image": "assets/pets/uncommon-duck.png",
+    "rarity": "Uncommon"
+  },
+  {
+    "id": 5,
+    "name": "Common Bunny",
+    "image": "assets/pets/common-bunny.png",
+    "rarity": "Common"
+  }
+]
