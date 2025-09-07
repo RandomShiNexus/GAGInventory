@@ -171,67 +171,44 @@ function rarityColorFor(rarity) {
   };
   return map[rarity] || 'var(--r-common)';
 }
-
 function applyMutationStyle(card, thumbEl, mutationId, allMutations, pet) {
   // Reset
   thumbEl.style.borderImage = '';
   thumbEl.style.background = '';
   card.style.borderColor = '';
   card.style.background = '';
+  card.style.borderRadius = '';
+  card.style.outline = '';
 
-  if (!mutationId) {
-    card.classList.add('rarity', `rarity-${pet.rarity}`);
+  const rarityStyle = rarityStyles[pet.rarity] || {};
 
-    if (pet.rarity === 'Prismatic') {
-      // Apply full rainbow gradient background and border
-      card.style.background = 'linear-gradient(135deg, red, orange, yellow, green, blue, indigo, violet)';
-      card.style.borderImage = 'linear-gradient(135deg, red, orange, yellow, green, blue, indigo, violet) 1';
-      card.style.borderStyle = 'solid';
-      card.style.borderWidth = '2px';
+  // Base: card background & border
+  card.style.background = rarityStyle.background || '#1b2030';
+  card.style.borderColor = rarityStyle.borderColor || '#2a3246';
+  card.style.borderRadius = '12px'; // rounded corners
 
-      thumbEl.style.borderImage = 'linear-gradient(135deg, red, orange, yellow, green, blue, indigo, violet) 1';
-      thumbEl.style.borderStyle = 'solid';
-      thumbEl.style.borderWidth = '3px';
-      thumbEl.style.background = 'linear-gradient(135deg, rgba(255,0,0,.2), rgba(255,127,0,.2), rgba(255,255,0,.2), rgba(0,255,0,.2), rgba(0,0,255,.2), rgba(75,0,130,.2), rgba(148,0,211,.2))';
-    } else {
-      card.style.background = rarityStyles[pet.rarity]?.background || '';
-    }
-    return;
+  // Apply mutation if exists and overrides
+  let mutation = null;
+  if (mutationId) {
+    mutation = allMutations.find(m => m.id === mutationId) || null;
   }
 
-  const m = allMutations.find(x => x.id === mutationId);
-  if (!m) {
-    card.classList.add('rarity', `rarity-${pet.rarity}`);
-    return;
-  }
-
-  const style = m.style || {};
-
-  if (style.background) card.style.background = style.background;
-
-  if (m.overrideRarity) {
-    card.classList.remove('rarity', `rarity-${pet.rarity}`);
-    if (style.borderColor) card.style.borderColor = style.borderColor;
-    else card.style.borderColor = '#888';
+  if (mutation && mutation.overrideRarity) {
+    if (mutation.style?.background) card.style.background = mutation.style.background;
+    if (mutation.style?.borderColor) card.style.borderColor = mutation.style.borderColor;
+    if (mutation.style?.borderImage) thumbEl.style.borderImage = mutation.style.borderImage;
+    if (mutation.style?.thumbBackground) thumbEl.style.background = mutation.style.thumbBackground;
   } else {
-    card.classList.add('rarity', `rarity-${pet.rarity}`);
-    if (style.borderColor) card.style.borderColor = style.borderColor;
-
-    // Handle prismatic
+    // Handle prismatic rarity default if no mutation override
     if (pet.rarity === 'Prismatic') {
-      card.style.background = 'linear-gradient(135deg, red, orange, yellow, green, blue, indigo, violet)';
-      card.style.borderImage = 'linear-gradient(135deg, red, orange, yellow, green, blue, indigo, violet) 1';
-      card.style.borderStyle = 'solid';
-      card.style.borderWidth = '2px';
+      const darkRainbow = 'linear-gradient(135deg, rgba(255,0,0,.15), rgba(255,127,0,.15), rgba(255,255,0,.15), rgba(0,255,0,.15), rgba(0,0,255,.15), rgba(75,0,130,.15), rgba(148,0,211,.15))';
+      card.style.background = darkRainbow;
+      card.style.border = '2px solid #fff3'; // subtle distinct outline
+      card.style.borderRadius = '12px';
 
-      thumbEl.style.borderImage = 'linear-gradient(135deg, red, orange, yellow, green, blue, indigo, violet) 1';
-      thumbEl.style.borderStyle = 'solid';
-      thumbEl.style.borderWidth = '3px';
-      thumbEl.style.background = 'linear-gradient(135deg, rgba(255,0,0,.2), rgba(255,127,0,.2), rgba(255,255,0,.2), rgba(0,255,0,.2), rgba(0,0,255,.2), rgba(75,0,130,.2), rgba(148,0,211,.2))';
+      thumbEl.style.background = darkRainbow;
+      thumbEl.style.border = '3px solid #fff3';
+      thumbEl.style.borderRadius = '10px';
     }
   }
-
-  if (style.borderImage) thumbEl.style.borderImage = style.borderImage;
-  if (style.thumbBackground) thumbEl.style.background = style.thumbBackground;
 }
-
