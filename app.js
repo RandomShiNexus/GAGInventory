@@ -10,7 +10,8 @@ export const rarityStyles = {
   Uncommon:  { borderColor: '#3cb371', background: '#d0f0c0'   },
   Rare:      { borderColor: '#4169e1', background: '#c6d8ff'   },
   Legendary: { borderColor: '#ff8c00', background: '#ffe4b5'   },
-  Divine:    { borderColor: '#8a2be2', background: '#e6ccff'   }
+  Divine:    { borderColor: '#8a2be2', background: '#e6ccff'   },
+  Prismatic:    { borderColor: '#8a2be2', background: '#e6ccff'   },
 };
 
 // Rarity ordering for sorting (low -> high)
