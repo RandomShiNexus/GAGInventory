@@ -89,6 +89,10 @@ export async function initApp() {
   inventory.onChange = () => {
     updateHashFromInventory(inventory.items);
     renderInventory(inventory);
+    // Update search system with new inventory data
+    if (window.updateSearchInventoryRef) {
+      window.updateSearchInventoryRef(inventory);
+    }
   };
 }
 
