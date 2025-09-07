@@ -1,0 +1,134 @@
+:root{
+  --radius: 14px;
+  --gap: 12px;
+  --bg: #0f1115;
+  --panel: #151924;
+  --text: #e9edf1;
+  --muted: #a7b0bf;
+  --accent: #6cc3ff;
+  --card-bg: #1b2030;
+  --card-border: #2a3246;
+  --shadow: 0 6px 20px rgba(0,0,0,.35);
+  --focus: 0 0 0 3px rgba(108,195,255,.35);
+  /* Rarity base colors (overridden by mutation if mutation.overrideRarity === true) */
+  --r-common: #bdbfc6;
+  --r-uncommon: #3cb371;
+  --r-rare: #4169e1;
+  --r-legendary: #ff8c00;
+  --r-divine: #8a2be2;
+}
+
+*{box-sizing:border-box}
+html,body{height:100%}
+body{
+  margin:0;
+  font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, Apple Color Emoji, Segoe UI Emoji;
+  color:var(--text);
+  background: radial-gradient(1200px 800px at 20% -10%, #1a2031 0%, #0f1115 55%);
+}
+
+.site-header,.site-footer{
+  display:flex; align-items:center; justify-content:space-between;
+  padding:16px clamp(14px, 3vw, 28px);
+  background: linear-gradient(180deg, rgba(255,255,255,.04), transparent);
+  position:sticky; top:0; z-index:10; backdrop-filter: blur(6px);
+}
+.site-footer{position:static; justify-content:center; color:var(--muted)}
+h1{font-size:clamp(20px, 3.2vw, 28px); margin:0}
+h2{font-size:clamp(16px, 2.4vw, 20px); margin:0 0 10px 0}
+a,button,select,input{font:inherit}
+
+.actions{display:flex; gap:10px}
+button{
+  border:1px solid var(--card-border);
+  background:linear-gradient(180deg, #1f2536, #181d2b);
+  color:var(--text); padding:8px 12px; border-radius:10px;
+  box-shadow:var(--shadow); cursor:pointer;
+}
+button:hover{filter:brightness(1.08)}
+button:focus-visible{outline: none; box-shadow: var(--focus)}
+a#btn-reset{color:var(--muted); text-decoration: underline dotted}
+
+.controls{
+  display:grid; grid-template-columns: 1fr auto auto; gap: var(--gap);
+  padding: 10px clamp(14px, 3vw, 28px);
+}
+.controls .control{display:flex; align-items:center; gap:8px}
+input[type="search"], select{
+  width:100%; min-width: 180px;
+  border:1px solid var(--card-border); background:#141a26; color:var(--text);
+  padding:10px 12px; border-radius:10px; box-shadow:var(--shadow);
+}
+input::placeholder{color:#7f8aa3}
+
+.layout{
+  display:grid; gap: var(--gap);
+  grid-template-columns: 1fr 1fr;
+  padding: 6px clamp(14px, 3vw, 28px) 30px;
+}
+@media (max-width: 980px){ .layout{ grid-template-columns: 1fr; } }
+
+.panel{
+  background:var(--panel); border:1px solid #21283a; border-radius: var(--radius);
+  padding:14px; box-shadow: var(--shadow);
+  min-height: 200px;
+}
+
+.grid{
+  display:grid; gap: var(--gap);
+  grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+}
+@media (max-width: 480px){
+  .grid{grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));}
+}
+
+.card{
+  background: var(--card-bg);
+  border: 2px solid var(--card-border);
+  border-radius: calc(var(--radius) - 2px);
+  overflow: clip;
+  display:flex; flex-direction:column; gap:8px; padding:10px;
+  transition: transform .1s ease, box-shadow .2s ease, border-color .2s ease;
+}
+.card:hover{ transform: translateY(-2px) }
+.card.selected{ outline: 2px solid var(--accent) }
+.card .thumb{
+  display:block; aspect-ratio: 1 / 1; width:100%;
+  border-radius: 10px;
+  border: 3px solid transparent; /* for border-image mutations */
+  background: #0d1220 center / cover no-repeat;
+}
+.card .name{ font-weight:600; line-height:1.2 }
+.card .meta{ color:var(--muted); font-size:12px; display:flex; gap:6px; align-items:center; justify-content:space-between }
+.card .row{ display:flex; gap:8px; align-items:center; justify-content:space-between }
+.card .mutations{ display:flex; gap:6px; flex-wrap:wrap }
+.card .pill{
+  border:1px solid var(--card-border); background:#121828; padding:6px 8px; border-radius:999px;
+  font-size:12px; cursor:pointer; user-select:none;
+}
+.card .pill.active{ border-color:var(--accent); color:#fff }
+.card .remove{ color:#ff6b6b; background:#2a1b1b; border-color:#4b2d2d }
+
+.badge{
+  display:inline-flex; align-items:center; gap:6px; font-size:12px;
+  padding:4px 8px; border-radius:999px; border:1px solid var(--card-border); background:#101522;
+}
+.badge .dot{width:8px; height:8px; border-radius:999px; display:inline-block}
+
+.empty{ color:var(--muted); text-align:center; padding:24px 6px }
+.hidden{ display:none !important }
+
+/* Rarity helpers (used when mutation does NOT override) */
+.rarity-Common   { --rarity-color: var(--r-common); }
+.rarity-Uncommon { --rarity-color: var(--r-uncommon); }
+.rarity-Rare     { --rarity-color: var(--r-rare); }
+.rarity-Legendary{ --rarity-color: var(--r-legendary); }
+.rarity-Divine   { --rarity-color: var(--r-divine); }
+
+.card.rarity .thumb{ border-color: var(--rarity-color); }
+.card.rarity { border-color: color-mix(in hsl, var(--rarity-color) 35%, var(--card-border)); }
+
+/* Mutation icons (optional tiny square shown in badge) */
+.icon{
+  width:14px; height:14px; border-radius:4px; display:inline-block; border:1px solid #0003;
+}
