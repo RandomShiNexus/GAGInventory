@@ -9,12 +9,12 @@
     "id": 2,
     "name": "Golden Lab",
     "image": "assets/pets/GoldenLabPet.png",
-    "rarity": "Common"
+    "rarity": "Rare"
   },
   {
     "id": 3,
     "name": "Bunny",
     "image": "assets/pets/BunnyPet.png",
-    "rarity": "Common"
+    "rarity": "Divine"
   }
 ]
