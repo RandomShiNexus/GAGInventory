@@ -150,40 +150,60 @@ function rarityColorFor(rarity) {
 }
 
 function applyMutationStyle(card, thumbEl, mutationId, allMutations, pet) {
-  // Reset thumb & card
+  // Reset thumb & card styles
   thumbEl.style.background = '';
   thumbEl.style.borderImage = '';
   thumbEl.style.borderColor = '';
+  thumbEl.style.borderWidth = '3px';
+  thumbEl.style.borderStyle = 'solid';
+
   card.style.background = '';
   card.style.borderColor = '';
+  card.style.borderImage = '';
+  card.style.borderWidth = '2px';
+  card.style.borderStyle = 'solid';
   card.style.borderRadius = '12px';
   card.style.outline = '';
 
+  // Apply base rarity style
   const rarityStyle = rarityStyles[pet.rarity] || {};
   card.style.background = rarityStyle.background || '#1b2030';
   card.style.borderColor = rarityStyle.borderColor || '#2a3246';
 
-  // Prismatic default: rainbow outline on thumb, no thumb background
+  // Prismatic default: rainbow outline on thumb, default image background
   if (pet.rarity === 'Prismatic') {
     thumbEl.style.borderImage = 'linear-gradient(45deg, red, orange, yellow, green, blue, indigo, violet) 1';
-    thumbEl.style.borderWidth = '3px';
-    thumbEl.style.borderStyle = 'solid';
+    thumbEl.style.borderColor = ''; // clear fallback
     thumbEl.style.background = '#0d1220'; // default image background
+
     card.style.background = 'linear-gradient(135deg, rgba(255,0,0,.15), rgba(255,127,0,.15), rgba(255,255,0,.15), rgba(0,255,0,.15), rgba(0,0,255,.15), rgba(75,0,130,.15), rgba(148,0,211,.15))';
-    card.style.border = '2px solid #fff3';
-    card.style.borderRadius = '12px';
+    card.style.borderImage = ''; // clear fallback
+    card.style.borderColor = '#fff3';
   }
 
-  // Apply mutation if overrideRarity
+  // Apply mutation if it exists and overrides rarity
   const mutation = mutationId ? allMutations.find(m => m.id === mutationId) : null;
   if (mutation && mutation.overrideRarity) {
+    // Card background
     if (mutation.style?.background) card.style.background = mutation.style.background;
-    if (mutation.style?.borderColor) {
-      card.style.borderColor = mutation.style.borderColor;
-      thumbEl.style.borderColor = mutation.style.borderColor;
-      thumbEl.style.borderImage = '';
-    }
-    if (mutation.style?.borderImage) thumbEl.style.borderImage = mutation.style.borderImage;
+
+    // Thumb background
     if (mutation.style?.thumbBackground) thumbEl.style.background = mutation.style.thumbBackground;
+
+    // Border handling
+    if (mutation.style?.borderImage) {
+      // Gradient border
+      thumbEl.style.borderImage = mutation.style.borderImage;
+      thumbEl.style.borderColor = ''; // clear fallback
+      card.style.borderImage = mutation.style.borderImage;
+      card.style.borderColor = ''; // clear fallback
+    } else if (mutation.style?.borderColor) {
+      // Solid color border
+      thumbEl.style.borderImage = '';
+      thumbEl.style.borderColor = mutation.style.borderColor;
+      card.style.borderImage = '';
+      card.style.borderColor = mutation.style.borderColor;
+    }
   }
 }
+
