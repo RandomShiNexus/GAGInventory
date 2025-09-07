@@ -6,14 +6,15 @@ import { Inventory } from './components/inventory.js';
 
 // Global rarity styles (contributors can tweak here)
 export const rarityStyles = {
-  Common:    { borderColor: '#808080', background: '#dcdcdc' },
-  Uncommon:  { borderColor: '#008000', background: '#90ee90' },
-  Rare:      { borderColor: '#0000ff', background: '#add8e6' },
-  Legendary: { borderColor: '#ffd700', background: '#fff8dc' },
-  Mythical:  { borderColor: '#800080', background: '#dda0dd' },
-  Divine:    { borderColor: '#ff8c00', background: '#ffe4b5' },
-  Prismatic: { borderColor: '#e0cfff', background: '#fcefff' },
+  Common:    { borderColor: '#808080', background: '#404040' },
+  Uncommon:  { borderColor: '#008000', background: '#104010' },
+  Rare:      { borderColor: '#0000ff', background: '#101040' },
+  Legendary: { borderColor: '#ffd700', background: '#403200' },
+  Mythical:  { borderColor: '#800080', background: '#301030' },
+  Divine:    { borderColor: '#ff8c00', background: '#402600' },
+  Prismatic: { borderColor: 'linear-gradient(45deg, red, orange, yellow, green, blue, indigo, violet)', background: '#400000' }
 };
+
 
 // Rarity ordering for sorting (low -> high)
 export const rarityRank = { Common: 1, Uncommon: 2, Rare: 3, Legendary: 4, Mythical: 5, Divine: 6, Prismatic: 7 };
