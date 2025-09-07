@@ -150,7 +150,7 @@ function rarityColorFor(rarity) {
 }
 
 function applyMutationStyle(card, thumbEl, mutationId, allMutations, pet) {
-  // Reset thumb & card styles
+  // Reset thumb & card
   thumbEl.style.background = '';
   thumbEl.style.borderImage = '';
   thumbEl.style.borderColor = '';
@@ -165,23 +165,23 @@ function applyMutationStyle(card, thumbEl, mutationId, allMutations, pet) {
   card.style.borderRadius = '12px';
   card.style.outline = '';
 
-  // Apply base rarity style
+  // Base rarity style
   const rarityStyle = rarityStyles[pet.rarity] || {};
   card.style.background = rarityStyle.background || '#1b2030';
   card.style.borderColor = rarityStyle.borderColor || '#2a3246';
 
-  // Prismatic default: rainbow outline on thumb, default image background
-  if (pet.rarity === 'Prismatic') {
+  // Prismatic default (if no mutation): rainbow outline, no thumb background
+  if (pet.rarity === 'Prismatic' && !mutationId) {
     thumbEl.style.borderImage = 'linear-gradient(45deg, red, orange, yellow, green, blue, indigo, violet) 1';
-    thumbEl.style.borderColor = ''; // clear fallback
-    thumbEl.style.background = '#0d1220'; // default image background
+    thumbEl.style.borderColor = ''; 
+    thumbEl.style.background = '#0d1220'; // keep image background default
 
     card.style.background = 'linear-gradient(135deg, rgba(255,0,0,.15), rgba(255,127,0,.15), rgba(255,255,0,.15), rgba(0,255,0,.15), rgba(0,0,255,.15), rgba(75,0,130,.15), rgba(148,0,211,.15))';
-    card.style.borderImage = ''; // clear fallback
     card.style.borderColor = '#fff3';
+    card.style.borderImage = '';
   }
 
-  // Apply mutation if it exists and overrides rarity
+  // Apply mutation if overrideRarity
   const mutation = mutationId ? allMutations.find(m => m.id === mutationId) : null;
   if (mutation && mutation.overrideRarity) {
     // Card background
@@ -190,15 +190,13 @@ function applyMutationStyle(card, thumbEl, mutationId, allMutations, pet) {
     // Thumb background
     if (mutation.style?.thumbBackground) thumbEl.style.background = mutation.style.thumbBackground;
 
-    // Border handling
+    // Thumb & Card borders
     if (mutation.style?.borderImage) {
-      // Gradient border
       thumbEl.style.borderImage = mutation.style.borderImage;
-      thumbEl.style.borderColor = ''; // clear fallback
+      thumbEl.style.borderColor = '';
       card.style.borderImage = mutation.style.borderImage;
-      card.style.borderColor = ''; // clear fallback
+      card.style.borderColor = '';
     } else if (mutation.style?.borderColor) {
-      // Solid color border
       thumbEl.style.borderImage = '';
       thumbEl.style.borderColor = mutation.style.borderColor;
       card.style.borderImage = '';
@@ -206,4 +204,3 @@ function applyMutationStyle(card, thumbEl, mutationId, allMutations, pet) {
     }
   }
 }
-
