@@ -1,6 +1,50 @@
 [
   {
-    "id": "golden",
+    "id": "s",
+    "name": "Shiny",
+    "code": "s",
+    "style": {
+      "borderColor": "#ffd4e0",
+      "background": "linear-gradient(180deg, #3a2a4a, #4a3a5a)",
+      "thumbBackground": "linear-gradient(180deg, #ffe0f0, #ffb3d9)"
+    },
+    "overrideRarity": true
+  },
+  {
+    "id": "i",
+    "name": "Inverted",
+    "code": "i",
+    "style": {
+      "borderColor": "#ffffff",
+      "background": "linear-gradient(180deg, #101010, #303030)",
+      "thumbBackground": "linear-gradient(180deg, #ffffff, #aaaaaa)"
+    },
+    "overrideRarity": true
+  },
+  {
+    "id": "f",
+    "name": "Frozen",
+    "code": "f",
+    "style": {
+      "borderColor": "#99dfff",
+      "background": "linear-gradient(180deg, #0d1a2a, #1a2f4a)",
+      "thumbBackground": "linear-gradient(180deg, #ccf0ff, #99dfff)"
+    },
+    "overrideRarity": true
+  },
+  {
+    "id": "w",
+    "name": "Windy",
+    "code": "w",
+    "style": {
+      "borderColor": "#a0e0ff",
+      "background": "linear-gradient(180deg, #1a2a2f, #2a3a3f)",
+      "thumbBackground": "linear-gradient(180deg, #c0f0ff, #80dfff)"
+    },
+    "overrideRarity": true
+  },
+  {
+    "id": "g",
     "name": "Golden",
     "code": "g",
     "style": {
@@ -11,13 +55,167 @@
     "overrideRarity": true
   },
   {
-    "id": "rainbow",
+    "id": "m",
+    "name": "Mega",
+    "code": "m",
+    "style": {
+      "borderColor": "#ff9999",
+      "background": "linear-gradient(180deg, #3a0d0d, #5a1a1a)",
+      "thumbBackground": "linear-gradient(180deg, #ffcccc, #ff9999)"
+    },
+    "overrideRarity": true
+  },
+  {
+    "id": "t",
+    "name": "Tiny",
+    "code": "t",
+    "style": {
+      "borderColor": "#99ff99",
+      "background": "linear-gradient(180deg, #0d2a0d, #1a3a1a)",
+      "thumbBackground": "linear-gradient(180deg, #ccffcc, #99ff99)"
+    },
+    "overrideRarity": true
+  },
+  {
+    "id": "k",
+    "name": "IronSkin",
+    "code": "k",
+    "style": {
+      "borderColor": "#cccccc",
+      "background": "linear-gradient(180deg, #1a1a1a, #3a3a3a)",
+      "thumbBackground": "linear-gradient(180deg, #eeeeee, #cccccc)"
+    },
+    "overrideRarity": true
+  },
+  {
+    "id": "d",
+    "name": "Radiant",
+    "code": "d",
+    "style": {
+      "borderColor": "#ffff99",
+      "background": "linear-gradient(180deg, #2a2a0d, #3a3a1a)",
+      "thumbBackground": "linear-gradient(180deg, #ffffcc, #ffff99)"
+    },
+    "overrideRarity": true
+  },
+  {
+    "id": "h",
+    "name": "Shocked",
+    "code": "h",
+    "style": {
+      "borderColor": "#ffff33",
+      "background": "linear-gradient(180deg, #2a2a1a, #3a3a2a)",
+      "thumbBackground": "linear-gradient(180deg, #ffff66, #ffff33)"
+    },
+    "overrideRarity": true
+  },
+  {
+    "id": "r",
     "name": "Rainbow",
     "code": "r",
     "style": {
       "borderImage": "linear-gradient(45deg, red, orange, yellow, green, blue, indigo, violet) 1",
       "background": "linear-gradient(135deg, #4b1f1f, #5a2a2a, #3f4b3f, #34434f, #502a50, #613061, #4a1f4a)",
       "thumbBackground": "linear-gradient(45deg, red, orange, yellow, green, blue, indigo, violet)"
+    },
+    "overrideRarity": true
+  },
+  {
+    "id": "a",
+    "name": "Ascended",
+    "code": "a",
+    "style": {
+      "borderColor": "#ff99ff",
+      "background": "linear-gradient(180deg, #2a0d2a, #3a1a3a)",
+      "thumbBackground": "linear-gradient(180deg, #ffccff, #ff99ff)"
+    },
+    "overrideRarity": true
+  },
+  {
+    "id": "tr",
+    "name": "Tranquil",
+    "code": "tr",
+    "style": {
+      "borderColor": "#99ccff",
+      "background": "linear-gradient(180deg, #0d1a2a, #1a2f4a)",
+      "thumbBackground": "linear-gradient(180deg, #cce6ff, #99ccff)"
+    },
+    "overrideRarity": true
+  },
+  {
+    "id": "co",
+    "name": "Corrupted",
+    "code": "co",
+    "style": {
+      "borderColor": "#660066",
+      "background": "linear-gradient(180deg, #1a0d1a, #3a1a3a)",
+      "thumbBackground": "linear-gradient(180deg, #990099, #660066)"
+    },
+    "overrideRarity": true
+  },
+  {
+    "id": "fr",
+    "name": "Fried",
+    "code": "fr",
+    "style": {
+      "borderColor": "#ff6600",
+      "background": "linear-gradient(180deg, #331a0d, #5a2a0d)",
+      "thumbBackground": "linear-gradient(180deg, #ff9966, #ff6600)"
+    },
+    "overrideRarity": true
+  },
+  {
+    "id": "ar",
+    "name": "Aromatic",
+    "code": "ar",
+    "style": {
+      "borderColor": "#ff99cc",
+      "background": "linear-gradient(180deg, #3a0d1a, #5a2a3a)",
+      "thumbBackground": "linear-gradient(180deg, #ffcce6, #ff99cc)"
+    },
+    "overrideRarity": true
+  },
+  {
+    "id": "gb",
+    "name": "GiantBean",
+    "code": "gb",
+    "style": {
+      "borderColor": "#996633",
+      "background": "linear-gradient(180deg, #331a0d, #4a2a1a)",
+      "thumbBackground": "linear-gradient(180deg, #cc9966, #996633)"
+    },
+    "overrideRarity": true
+  },
+  {
+    "id": "si",
+    "name": "Silver",
+    "code": "si",
+    "style": {
+      "borderColor": "#c0c0c0",
+      "background": "linear-gradient(180deg, #1a1a1a, #2a2a2a)",
+      "thumbBackground": "linear-gradient(180deg, #e0e0e0, #c0c0c0)"
+    },
+    "overrideRarity": true
+  },
+  {
+    "id": "gl",
+    "name": "Glimmering",
+    "code": "gl",
+    "style": {
+      "borderColor": "#ffcc33",
+      "background": "linear-gradient(180deg, #332a0d, #5a4a1a)",
+      "thumbBackground": "linear-gradient(180deg, #ffe066, #ffcc33)"
+    },
+    "overrideRarity": true
+  },
+  {
+    "id": "lu",
+    "name": "Luminous",
+    "code": "lu",
+    "style": {
+      "borderColor": "#99ffff",
+      "background": "linear-gradient(180deg, #0d1a1a, #1a3a3a)",
+      "thumbBackground": "linear-gradient(180deg, #ccffff, #99ffff)"
     },
     "overrideRarity": true
   }
