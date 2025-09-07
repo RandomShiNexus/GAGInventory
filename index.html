@@ -1,40 +1,70 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Grow A Garden - Pet Inventory</title>
-  <link rel="stylesheet" href="style.css"/>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Grow A Garden – Pet Inventory</title>
+  <link rel="stylesheet" href="style.css" />
+  <meta name="description" content="Build and share your Grow A Garden pet inventory. JSON-driven, mobile friendly, no login needed." />
 </head>
 <body>
-  <header>
-    <h1>🌱 Grow A Garden – Pet Inventory</h1>
+  <header class="site-header">
+    <h1>Grow A Garden – Pet Inventory</h1>
+    <div class="actions">
+      <button id="btn-share" title="Copy shareable link">Share</button>
+      <a id="btn-reset" href="#" title="Clear inventory">Reset</a>
+    </div>
   </header>
 
-  <main>
-    <!-- Pet Pool -->
-    <section class="panel">
+  <section class="controls">
+    <div class="control">
+      <input id="search-input" type="search" placeholder="Search pets by name…" aria-label="Search pets" />
+    </div>
+    <div class="control">
+      <label for="sort-select">Sort by</label>
+      <select id="sort-select">
+        <option value="name-asc">Name (A→Z)</option>
+        <option value="name-desc">Name (Z→A)</option>
+        <option value="rarity-asc">Rarity (low→high)</option>
+        <option value="rarity-desc">Rarity (high→low)</option>
+        <option value="mutation-asc">Mutation (A→Z)</option>
+        <option value="mutation-desc">Mutation (Z→A)</option>
+      </select>
+    </div>
+    <div class="control">
+      <label for="view-select">View</label>
+      <select id="view-select">
+        <option value="pool">Pet Pool</option>
+        <option value="inventory">My Inventory</option>
+        <option value="both" selected>Both</option>
+      </select>
+    </div>
+  </section>
+
+  <main class="layout">
+    <section class="panel" id="pool-panel" aria-label="Pet Pool">
       <h2>Pet Pool</h2>
-      <input type="text" id="pool-search" placeholder="Search pets..."/>
-      <div id="pet-pool" class="grid"></div>
+      <div id="pool-grid" class="grid"></div>
+      <p id="pool-empty" class="empty hidden">No pets match your search/sort filters.</p>
     </section>
 
-    <!-- Inventory -->
-    <section class="panel">
-      <h2>Your Inventory</h2>
-      <input type="text" id="inventory-search" placeholder="Search inventory..."/>
-      <div id="inventory" class="grid"></div>
+    <section class="panel" id="inventory-panel" aria-label="My Inventory">
+      <h2>My Inventory</h2>
+      <div id="inventory-grid" class="grid"></div>
+      <p id="inventory-empty" class="empty">Your inventory is empty. Click pets in the pool to add them.</p>
     </section>
   </main>
 
-  <footer>
-    <p>Shareable link updates automatically in your address bar.</p>
+  <footer class="site-footer">
+    <p>
+      Built for Grow A Garden fans • JSON-driven •
+      <a href="https://github.com/" target="_blank" rel="noreferrer">Contribute on GitHub</a>
+    </p>
   </footer>
 
-  <script src="app.js"></script>
-  <script type="module" src="components/petCard.js"></script>
-  <script type="module" src="components/mutationSelector.js"></script>
-  <script type="module" src="components/searchSort.js"></script>
-  <script type="module" src="components/inventory.js"></script>
+  <script type="module">
+    import { initApp } from './app.js';
+    initApp();
+  </script>
 </body>
 </html>
