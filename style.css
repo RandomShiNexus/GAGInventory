@@ -178,10 +178,11 @@ input::placeholder{color:#7f8aa3}
   border-color: color-mix(in hsl, var(--rarity-color) 35%, var(--card-border));
 }
 
-/* Optional prismatic thumb gradient */
 .card-thumb.prismatic {
-  background: linear-gradient(45deg, red, orange, yellow, green, blue, indigo, violet);
   border-image: linear-gradient(45deg, red, orange, yellow, green, blue, indigo, violet) 1;
+  border-width: 3px;
+  border-style: solid;
+  background: #400000 center / cover no-repeat;
 }
 
 /* Mutation icons (tiny squares in badges) */
