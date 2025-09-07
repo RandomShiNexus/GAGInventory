@@ -9,12 +9,90 @@
     "id": 2,
     "name": "Golden Lab",
     "image": "assets/pets/GoldenLabPet.png",
-    "rarity": "Prismatic"
+    "rarity": "Common"
   },
   {
     "id": 3,
     "name": "Bunny",
     "image": "assets/pets/BunnyPet.png",
+    "rarity": "Common"
+  },
+  {
+    "id": 4,
+    "name": "Black Bunny",
+    "image": "assets/pets/Black_bunny_icon.png",
+    "rarity": "Uncommon"
+  },
+  {
+    "id": 5,
+    "name": "Cat",
+    "image": "assets/pets/Catpet.png",
+    "rarity": "Uncommon"
+  },
+  {
+    "id": 6,
+    "name": "Corrupted Kitsune",
+    "image": "assets/pets/CorruptedKitsune.png",
+    "rarity": "Prismatic"
+  },
+  {
+    "id": 7,
+    "name": "Disco Bee",
+    "image": "assets/pets/DiscoBeeIcon.gif",
     "rarity": "Divine"
+  },
+  {
+    "id": 8,
+    "name": "Dog",
+    "image": "assets/pets/DogPet.png",
+    "rarity": "Common"
+  },
+  {
+    "id": 9,
+    "name": "Dragonfly",
+    "image": "assets/pets/DragonflyIcon.png",
+    "rarity": "Divine"
+  },
+  {
+    "id": 10,
+    "name": "Grey Mouse",
+    "image": "assets/pets/GreyMouse.png",
+    "rarity": "Legendary"
+  },
+  {
+    "id": 11,
+    "name": "Honey Bee",
+    "image": "assets/pets/HoneyBee.png",
+    "rarity": "Rare"
+  },
+  {
+    "id": 12,
+    "name": "Kitsune",
+    "image": "assets/pets/Kitsune.png",
+    "rarity": "Prismatic"
+  },
+  {
+    "id": 13,
+    "name": "Pack Bee",
+    "image": "assets/pets/PackBee.png",
+    "rarity": "Mythical"
+  },
+  {
+    "id": 14,
+    "name": "Peacock",
+    "image": "assets/pets/Peacock.png",
+    "rarity": "Legendary"
+  },
+  {
+    "id": 15,
+    "name": "Pixie",
+    "image": "assets/pets/Pixie.png",
+    "rarity": "Rare"
+  },
+  {
+    "id": 16,
+    "name": "Praying Mantis",
+    "image": "assets/pets/PrayingMantis.png",
+    "rarity": "Mythical"
   }
 ]
