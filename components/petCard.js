@@ -176,10 +176,7 @@ function rarityColorFor(rarity) {
 function applyMutationStyle(card, thumbEl, mutationId, allMutations, pet) {
   // Reset
   thumbEl.style.borderImage = '';
-  thumbEl.style.backgroundImage = '';
   thumbEl.style.background = '';
-
-  // Reset card border to rarity baseline
   card.style.borderColor = '';
   card.style.background = '';
 
@@ -197,24 +194,22 @@ function applyMutationStyle(card, thumbEl, mutationId, allMutations, pet) {
 
   const style = m.style || {};
 
-  // When mutation overrides rarity, we don't show rarity border color
+  // Apply card background if exists
+  if (style.background) card.style.background = style.background;
+
+  // Apply card border
   if (m.overrideRarity) {
     card.classList.remove('rarity', `rarity-${pet.rarity}`);
+    // fallback: if borderColor exists, apply it; otherwise use default
+    if (style.borderColor) card.style.borderColor = style.borderColor;
+    else card.style.borderColor = '#888'; // neutral
   } else {
     card.classList.add('rarity', `rarity-${pet.rarity}`);
+    if (style.borderColor) card.style.borderColor = style.borderColor;
   }
 
-  // Apply style keys safely
-  if (style.borderColor) {
-    card.style.borderColor = style.borderColor;
-  }
-  if (style.background) {
-    card.style.background = style.background;
-  }
-  if (style.borderImage) {
-    thumbEl.style.borderImage = style.borderImage;
-  }
-  if (style.thumbBackground) {
-    thumbEl.style.background = style.thumbBackground;
-  }
+  // Thumb styling
+  if (style.borderImage) thumbEl.style.borderImage = style.borderImage;
+  if (style.thumbBackground) thumbEl.style.background = style.thumbBackground;
 }
+
