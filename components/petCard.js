@@ -156,13 +156,14 @@ function applyMutationStyle(card, thumbEl, mutationId, allMutations, pet) {
   thumbEl.style.borderColor = '';
   thumbEl.style.borderWidth = '3px';
   thumbEl.style.borderStyle = 'solid';
+  thumbEl.style.borderRadius = '10px'; // rounded
 
   card.style.background = '';
   card.style.borderColor = '';
   card.style.borderImage = '';
   card.style.borderWidth = '2px';
   card.style.borderStyle = 'solid';
-  card.style.borderRadius = '12px';
+  card.style.borderRadius = '12px'; // rounded
   card.style.outline = '';
 
   // Base rarity style
@@ -170,15 +171,16 @@ function applyMutationStyle(card, thumbEl, mutationId, allMutations, pet) {
   card.style.background = rarityStyle.background || '#1b2030';
   card.style.borderColor = rarityStyle.borderColor || '#2a3246';
 
-  // Prismatic default (if no mutation): rainbow outline, no thumb background
+  // Prismatic default (if no mutation)
   if (pet.rarity === 'Prismatic' && !mutationId) {
     thumbEl.style.borderImage = 'linear-gradient(45deg, red, orange, yellow, green, blue, indigo, violet) 1';
     thumbEl.style.borderColor = ''; 
-    thumbEl.style.background = '#0d1220'; // keep image background default
+    thumbEl.style.background = '#0d1220';
 
     card.style.background = 'linear-gradient(135deg, rgba(255,0,0,.15), rgba(255,127,0,.15), rgba(255,255,0,.15), rgba(0,255,0,.15), rgba(0,0,255,.15), rgba(75,0,130,.15), rgba(148,0,211,.15))';
-    card.style.borderColor = '#fff3';
     card.style.borderImage = '';
+    card.style.borderColor = '#fff3';
+    card.style.borderRadius = '12px';
   }
 
   // Apply mutation if overrideRarity
@@ -194,13 +196,30 @@ function applyMutationStyle(card, thumbEl, mutationId, allMutations, pet) {
     if (mutation.style?.borderImage) {
       thumbEl.style.borderImage = mutation.style.borderImage;
       thumbEl.style.borderColor = '';
+      thumbEl.style.borderRadius = '10px'; // rounded
+
       card.style.borderImage = mutation.style.borderImage;
       card.style.borderColor = '';
+      card.style.borderRadius = '12px'; // rounded
+
+      thumbEl.style.borderWidth = '3px';
+      card.style.borderWidth = '2px';
+      thumbEl.style.borderStyle = 'solid';
+      card.style.borderStyle = 'solid';
     } else if (mutation.style?.borderColor) {
       thumbEl.style.borderImage = '';
       thumbEl.style.borderColor = mutation.style.borderColor;
+      thumbEl.style.borderRadius = '10px'; // rounded
+
       card.style.borderImage = '';
       card.style.borderColor = mutation.style.borderColor;
+      card.style.borderRadius = '12px'; // rounded
+
+      thumbEl.style.borderWidth = '3px';
+      card.style.borderWidth = '2px';
+      thumbEl.style.borderStyle = 'solid';
+      card.style.borderStyle = 'solid';
     }
   }
 }
+
