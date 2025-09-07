@@ -161,7 +161,7 @@ input::placeholder{color:#7f8aa3}
 .empty{ color:var(--muted); text-align:center; padding:24px 6px }
 .hidden{ display:none !important }
 
-/* Rarity helpers (for thumb border and card border) */
+/* Rarity helpers */
 .rarity-Common    { --rarity-color: var(--r-common); }
 .rarity-Uncommon  { --rarity-color: var(--r-uncommon); }
 .rarity-Rare      { --rarity-color: var(--r-rare); }
