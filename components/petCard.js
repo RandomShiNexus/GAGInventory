@@ -173,7 +173,7 @@ function rarityColorFor(rarity) {
 }
 
 /* Apply mutation style; if mutation.overrideRarity === true, it visually overrides rarity styling */
-function applyMutationStyle(card, thumbEl, mutationId, allMutations, pet) {
+function rarityColorFor(rarity) {
   // Reset
   thumbEl.style.borderImage = '';
   thumbEl.style.backgroundImage = '';
