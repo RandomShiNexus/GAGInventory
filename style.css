@@ -1,4 +1,4 @@
-:root{
+:root {
   --radius: 14px;
   --gap: 12px;
   --bg: #0f1115;
@@ -10,15 +10,18 @@
   --card-border: #2a3246;
   --shadow: 0 6px 20px rgba(0,0,0,.35);
   --focus: 0 0 0 3px rgba(108,195,255,.35);
+
   /* Rarity base colors (overridden by mutation if mutation.overrideRarity === true) */
-  --r-common: #bdbfc6;
-  --r-uncommon: #3cb371;
-  --r-rare: #4169e1;
-  --r-legendary: #ff8c00;
-  --r-divine: #8a2be2;
-  --r-prismatic: #CC6E0E;
+  --r-common: #808080;
+  --r-uncommon: #008000;
+  --r-rare: #0000ff;
+  --r-legendary: #ffd700;
+  --r-mythical: #800080;
+  --r-divine: #ff8c00;
+  --r-prismatic: #e0cfff; /* fallback if gradient unsupported */
 }
 
+/* Global styles */
 *{box-sizing:border-box}
 html,body{height:100%}
 body{
@@ -39,6 +42,7 @@ h1{font-size:clamp(20px, 3.2vw, 28px); margin:0}
 h2{font-size:clamp(16px, 2.4vw, 20px); margin:0 0 10px 0}
 a,button,select,input{font:inherit}
 
+/* Controls */
 .actions{display:flex; gap:10px}
 button{
   border:1px solid var(--card-border);
@@ -62,6 +66,7 @@ input[type="search"], select{
 }
 input::placeholder{color:#7f8aa3}
 
+/* Layout */
 .layout{
   display:grid; gap: var(--gap);
   grid-template-columns: 1fr 1fr;
@@ -83,6 +88,7 @@ input::placeholder{color:#7f8aa3}
   .grid{grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));}
 }
 
+/* Cards */
 .card{
   background: var(--card-bg);
   border: 2px solid var(--card-border);
@@ -93,17 +99,19 @@ input::placeholder{color:#7f8aa3}
 }
 .card:hover{ transform: translateY(-2px) }
 .card.selected{ outline: 2px solid var(--accent) }
+
 .card .thumb{
   display:block; aspect-ratio: 1 / 1; width:100%;
   border-radius: 10px;
   border: 3px solid transparent; /* for border-image mutations */
   background: #0d1220 center / cover no-repeat;
 }
+
 .card .name{ font-weight:600; line-height:1.2 }
 .card .meta{ color:var(--muted); font-size:12px; display:flex; gap:6px; align-items:center; justify-content:space-between }
 .card .row{ display:flex; gap:8px; align-items:center; justify-content:space-between }
 
-/* New mutation dropdown styles */
+/* Mutation selector */
 .mutation-selector{
   display:flex; flex-direction:column; gap:4px; margin-top:6px;
 }
@@ -127,7 +135,7 @@ input::placeholder{color:#7f8aa3}
   min-width:20px; text-align:center; font-weight:600; color:var(--accent);
 }
 
-/* Button variants */
+/* Pill buttons */
 .pill{
   border:1px solid var(--card-border); background:#121828; padding:6px 8px; border-radius:999px;
   font-size:12px; cursor:pointer; user-select:none; display:inline-flex; align-items:center; gap:4px;
@@ -142,27 +150,41 @@ input::placeholder{color:#7f8aa3}
   font-weight:bold; font-size:14px; line-height:1;
 }
 
+/* Badges */
 .badge{
   display:inline-flex; align-items:center; gap:6px; font-size:12px;
   padding:4px 8px; border-radius:999px; border:1px solid var(--card-border); background:#101522;
 }
 .badge .dot{width:8px; height:8px; border-radius:999px; display:inline-block}
 
+/* Empty / hidden */
 .empty{ color:var(--muted); text-align:center; padding:24px 6px }
 .hidden{ display:none !important }
 
-/* Rarity helpers (used when mutation does NOT override) */
-.rarity-Common   { --rarity-color: var(--r-common); }
-.rarity-Uncommon { --rarity-color: var(--r-uncommon); }
-.rarity-Rare     { --rarity-color: var(--r-rare); }
-.rarity-Legendary{ --rarity-color: var(--r-legendary); }
-.rarity-Divine   { --rarity-color: var(--r-divine); }
-.rarity-Prismatic   { --rarity-color: var(--r-prismatic); }
+/* Rarity helpers (for thumb border and card border) */
+.rarity-Common    { --rarity-color: var(--r-common); }
+.rarity-Uncommon  { --rarity-color: var(--r-uncommon); }
+.rarity-Rare      { --rarity-color: var(--r-rare); }
+.rarity-Legendary { --rarity-color: var(--r-legendary); }
+.rarity-Mythical  { --rarity-color: var(--r-mythical); }
+.rarity-Divine    { --rarity-color: var(--r-divine); }
+.rarity-Prismatic { --rarity-color: var(--r-prismatic); }
 
-.card.rarity .thumb{ border-color: var(--rarity-color); }
-.card.rarity { border-color: color-mix(in hsl, var(--rarity-color) 35%, var(--card-border)); }
+.card.rarity .thumb{
+  border-color: var(--rarity-color);
+}
 
-/* Mutation icons (optional tiny square shown in badge) */
+.card.rarity {
+  border-color: color-mix(in hsl, var(--rarity-color) 35%, var(--card-border));
+}
+
+/* Optional prismatic thumb gradient */
+.card-thumb.prismatic {
+  background: linear-gradient(45deg, red, orange, yellow, green, blue, indigo, violet);
+  border-image: linear-gradient(45deg, red, orange, yellow, green, blue, indigo, violet) 1;
+}
+
+/* Mutation icons (tiny squares in badges) */
 .icon{
   width:14px; height:14px; border-radius:4px; display:inline-block; border:1px solid #0003;
 }
