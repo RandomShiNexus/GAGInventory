@@ -15,7 +15,7 @@
     "name": "Rainbow",
     "code": "r",
     "style": {
-      "borderColor": "linear-gradient(45deg, red, orange, yellow, green, blue, indigo, violet)",
+      "borderImage": "linear-gradient(45deg, red, orange, yellow, green, blue, indigo, violet) 1",
       "background": "linear-gradient(135deg, #4b1f1f, #5a2a2a, #3f4b3f, #34434f, #502a50, #613061, #4a1f4a)",
       "thumbBackground": "linear-gradient(45deg, red, orange, yellow, green, blue, indigo, violet)"
     },
