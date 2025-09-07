@@ -16,6 +16,7 @@
   --r-rare: #4169e1;
   --r-legendary: #ff8c00;
   --r-divine: #8a2be2;
+  --r-prismatic: #CC6E0E;
 }
 
 *{box-sizing:border-box}
@@ -156,6 +157,7 @@ input::placeholder{color:#7f8aa3}
 .rarity-Rare     { --rarity-color: var(--r-rare); }
 .rarity-Legendary{ --rarity-color: var(--r-legendary); }
 .rarity-Divine   { --rarity-color: var(--r-divine); }
+.rarity-Prismatic   { --rarity-color: var(--r-prismatic); }
 
 .card.rarity .thumb{ border-color: var(--rarity-color); }
 .card.rarity { border-color: color-mix(in hsl, var(--rarity-color) 35%, var(--card-border)); }
