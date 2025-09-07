@@ -229,29 +229,35 @@ function renderInventoryFiltered(inventory, filteredItems) {
  URL hash format:
    #inv=<entries>
    entries = comma-separated tokens
-   token = id[:code][:count]
+   token = id[:code][:weight][:age]
    id = numeric pet id
    code = short mutation code (from mutations.json "code" or auto-generated base36 index)
-   count = number of this pet (defaults to 1)
+   weight = weight in kg (2 decimal places)
+   age = age in years
 
  Example:
-   #inv=1:r:3,2:g:1,5::2
+   #inv=1:r:12.50:3,2:g:8.75:1,5::10.00:2
 
  Rules:
    - Order preserved (for nicer UX when sharing)
    - Unknown mutation codes are ignored gracefully
+   - Each entry represents one pet instance
 */
-function currentShareUrl(items) {
-  const entries = items.map(({ id, mutationId, count }) => {
-    let token = String(id);
+function currentShareUrl(instances) {
+  const entries = instances.map(({ petId, mutationId, weight, age }) => {
+    let token = String(petId);
     const m = mutationId ? DATA.mutationMap.get(mutationId) : null;
     const code = m ? m.code : '';
     
-    if (code || count > 1) {
+    // Always include mutation field (even if empty) if we have weight/age
+    if (code || weight || age) {
       token += ':' + (code || '');
     }
-    if (count > 1) {
-      token += ':' + count;
+    if (weight || age) {
+      token += ':' + (weight || '');
+    }
+    if (age) {
+      token += ':' + age;
     }
     
     return token;
@@ -273,14 +279,13 @@ function parseHashInventory() {
     const parts = tok.split(':');
     const idStr = parts[0];
     const code = parts[1] || null;
-    const countStr = parts[2] || '1';
+    const weightStr = parts[2] || null;
+    const ageStr = parts[3] || null;
     
-    const id = Number(idStr);
-    const count = Number(countStr) || 1;
-    
-    if (!Number.isFinite(id)) return;
+    const petId = Number(idStr);    
+    if (!Number.isFinite(petId)) return;
 
-    const pet = DATA.petMap.get(id);
+    const pet = DATA.petMap.get(petId);
     if (!pet) return;
 
     let mutationId = null;
@@ -288,7 +293,17 @@ function parseHashInventory() {
       const mid = DATA.mutationCodeToId.get(code);
       if (mid) mutationId = mid;
     }
-    out.push({ id, mutationId, pet, count });
+    
+    const weight = weightStr ? parseFloat(weightStr) : null;
+    const age = ageStr ? parseInt(ageStr) : null;
+    
+    out.push({ 
+      petId, 
+      mutationId, 
+      pet, 
+      weight: (weight && !isNaN(weight)) ? weight : null,
+      age: (age && !isNaN(age)) ? age : null
+    });
   });
   return out;
 }
