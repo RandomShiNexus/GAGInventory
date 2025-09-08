@@ -1,4 +1,4 @@
-// Search & sort with separate filtering for pool and inventory
+// Search & sort with unified filtering for both pool and inventory
 // Calls render functions to update content when filtering
 
 import { rarityRank } from '../app.js';
@@ -22,34 +22,64 @@ export function attachSearchAndSort({
     const query = (searchInput.value || '').trim().toLowerCase();
     const sortKey = sortSelect.value;
 
-    // View toggle
+    // View toggle - controls visibility
     const view = viewSelect.value;
     document.getElementById('pool-panel').style.display = 
       (view === 'inventory') ? 'none' : '';
     document.getElementById('inventory-panel').style.display = 
       (view === 'pool') ? 'none' : '';
 
-    // Filter and sort pool
+    // Always filter both sections if they have data and are visible
+    // Filter and sort pool (when visible)
     if (view !== 'inventory' && originalPets.length) {
       let filteredPets = originalPets.filter(pet => {
-        const name = pet.name.toLowerCase();
-        return !query || name.includes(query);
+        return matchesSearch(pet, query);
       });
       
       filteredPets = sortPets(filteredPets, sortKey);
       onPoolFilter?.(filteredPets);
     }
 
-    // Filter and sort inventory
+    // Filter and sort inventory (when visible)
     if (view !== 'pool' && originalInventory) {
       let filteredItems = originalInventory.items.filter(item => {
-        const name = item.pet.name.toLowerCase();
-        return !query || name.includes(query);
+        return matchesSearchInventory(item, query);
       });
       
       filteredItems = sortInventoryItems(filteredItems, sortKey);
       onInventoryFilter?.(filteredItems);
     }
+  };
+
+  // Enhanced search matching for pets
+  const matchesSearch = (pet, query) => {
+    if (!query) return true;
+    
+    const name = pet.name.toLowerCase();
+    const rarity = pet.rarity.toLowerCase();
+    
+    return name.includes(query) || rarity.includes(query);
+  };
+
+  // Enhanced search matching for inventory items
+  const matchesSearchInventory = (item, query) => {
+    if (!query) return true;
+    
+    const name = item.pet.name.toLowerCase();
+    const rarity = item.pet.rarity.toLowerCase();
+    
+    // Check mutation name if present
+    let mutationName = '';
+    if (item.mutationId && window.PETS_DATA) {
+      const mutation = window.PETS_DATA.mutationMap.get(item.mutationId);
+      if (mutation) {
+        mutationName = mutation.name.toLowerCase();
+      }
+    }
+    
+    return name.includes(query) || 
+           rarity.includes(query) || 
+           (mutationName && mutationName.includes(query));
   };
 
   // Set up event listeners
