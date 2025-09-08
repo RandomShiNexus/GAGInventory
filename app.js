@@ -67,6 +67,11 @@ export async function initApp() {
     onInventoryFilter: (items) => renderInventoryFiltered(inventory, items)
   });
 
+  // Set initial inventory reference for search system
+  if (window.setInitialSearchInventoryRef) {
+    window.setInitialSearchInventoryRef(inventory);
+  }
+
   // Share link (copies to clipboard)
   UI.shareBtn.addEventListener('click', async () => {
     const link = currentShareUrl(inventory.items);
