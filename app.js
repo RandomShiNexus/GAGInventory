@@ -237,6 +237,8 @@ function parseHashInventory() {
     const idStr = parts[0];
     const code = parts[1] || null;
     const countStr = parts[2] || '1';
+    const weightStr = parts[3] || null;
+    const ageStr = parts[4] || null;
 
     const id = Number(idStr);
     const count = Number(countStr) || 1;
@@ -250,7 +252,19 @@ function parseHashInventory() {
       const mid = DATA.mutationCodeToId.get(code);
       if (mid) mutationId = mid;
     }
-    out.push({ id, mutationId, pet, count });
+
+    // Parse weight and age
+    const weight = (weightStr && weightStr !== '') ? parseFloat(weightStr) : null;
+    const age = (ageStr && ageStr !== '') ? parseInt(ageStr) : null;
+
+    out.push({ 
+      id, 
+      mutationId, 
+      pet, 
+      count,
+      weight: (weight !== null && !isNaN(weight)) ? Math.round(weight * 100) / 100 : null,
+      age: (age !== null && !isNaN(age) && age >= 0) ? age : null
+    });
   });
   return out;
 }
