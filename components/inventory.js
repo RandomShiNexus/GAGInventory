@@ -1,9 +1,9 @@
-// Enhanced inventory store with counts, using in-memory state.
+// Enhanced inventory store with counts, weight, age, using in-memory state.
 // (No localStorage needed because state lives in the shareable URL.)
 
 export class Inventory {
   constructor() {
-    this.items = []; // [{ id, mutationId, pet, count }]
+    this.items = []; // [{ id, mutationId, pet, count, weight, age }]
     this.onChange = null;
   }
 
@@ -43,7 +43,9 @@ export class Inventory {
         id, 
         mutationId: mutationId || null, 
         pet: pet || this._lookupPet(id),
-        count: 1 
+        count: 1,
+        weight: null, // No default value
+        age: null     // No default value
       };
       this.items.push(item);
     }
@@ -71,6 +73,26 @@ export class Inventory {
     const item = this.items.find(x => x.id === id);
     if (item) {
       item.mutationId = mutationId || null;
+      this._emit();
+    }
+  }
+
+  setWeight(id, weight) {
+    const item = this.items.find(x => x.id === id);
+    if (item) {
+      // Parse and validate weight (2 decimal places)
+      const parsed = weight === '' || weight === null ? null : parseFloat(weight);
+      item.weight = (parsed !== null && !isNaN(parsed)) ? Math.round(parsed * 100) / 100 : null;
+      this._emit();
+    }
+  }
+
+  setAge(id, age) {
+    const item = this.items.find(x => x.id === id);
+    if (item) {
+      // Parse and validate age (whole years)
+      const parsed = age === '' || age === null ? null : parseInt(age);
+      item.age = (parsed !== null && !isNaN(parsed) && parsed >= 0) ? parsed : null;
       this._emit();
     }
   }
