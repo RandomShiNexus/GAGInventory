@@ -99,6 +99,11 @@ export function attachSearchAndSort({
   // Export function to update inventory reference
   window.updateSearchInventoryRef = updateInventoryRef;
 
+  // Export function to set initial inventory reference
+  window.setInitialSearchInventoryRef = (inventory) => {
+    originalInventory = inventory;
+  };
+
   // Initial run
   applyFilters();
 }
