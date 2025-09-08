@@ -102,6 +102,8 @@ export function attachSearchAndSort({
   // Export function to set initial inventory reference
   window.setInitialSearchInventoryRef = (inventory) => {
     originalInventory = inventory;
+    // Apply filters immediately after setting inventory reference
+    applyFilters();
   };
 
   // Initial run
