@@ -7,7 +7,9 @@ export function createPetCard(options) {
     isInventory = false,
     count = 1,
     initialMutationId = null,
-    onAdd, onRemove, onSetMutation, onDelete
+    weight = null,
+    age = null,
+    onAdd, onRemove, onSetMutation, onDelete, onSetWeight, onSetAge
   } = options;
 
   const card = document.createElement('article');
@@ -24,6 +26,58 @@ export function createPetCard(options) {
   const name = document.createElement('div');
   name.className = 'name';
   name.textContent = pet.name;
+
+  // Weight and Age badges for inventory items
+  let petInfo = null;
+  if (isInventory) {
+    petInfo = document.createElement('div');
+    petInfo.className = 'pet-info';
+
+    const weightBadge = document.createElement('div');
+    weightBadge.className = 'info-badge weight-badge';
+    
+    const weightLabel = document.createElement('span');
+    weightLabel.className = 'info-label';
+    weightLabel.textContent = 'Weight:';
+    
+    const weightInput = document.createElement('input');
+    weightInput.type = 'number';
+    weightInput.step = '0.01';
+    weightInput.min = '0';
+    weightInput.placeholder = 'kg';
+    weightInput.className = 'info-input weight-input';
+    weightInput.value = weight !== null ? weight : '';
+    
+    weightInput.addEventListener('change', (e) => {
+      const value = e.target.value.trim();
+      onSetWeight?.(pet.id, value === '' ? null : value);
+    });
+    
+    weightBadge.append(weightLabel, weightInput);
+
+    const ageBadge = document.createElement('div');
+    ageBadge.className = 'info-badge age-badge';
+    
+    const ageLabel = document.createElement('span');
+    ageLabel.className = 'info-label';
+    ageLabel.textContent = 'Age:';
+    
+    const ageInput = document.createElement('input');
+    ageInput.type = 'number';
+    ageInput.min = '0';
+    ageInput.step = '1';
+    ageInput.placeholder = 'years';
+    ageInput.className = 'info-input age-input';
+    ageInput.value = age !== null ? age : '';
+    
+    ageInput.addEventListener('change', (e) => {
+      const value = e.target.value.trim();
+      onSetAge?.(pet.id, value === '' ? null : value);
+    });
+    
+    ageBadge.append(ageLabel, ageInput);
+    petInfo.append(weightBadge, ageBadge);
+  }
 
   const meta = document.createElement('div');
   meta.className = 'meta';
@@ -93,7 +147,10 @@ export function createPetCard(options) {
   rowTop.className = 'row';
   rowTop.appendChild(name);
 
-  card.append(thumb, rowTop, meta, mutationRow);
+  // Assemble card
+  card.append(thumb, rowTop);
+  if (petInfo) card.appendChild(petInfo); // Add weight/age info for inventory items
+  card.append(meta, mutationRow);
 
   applyMutationStyle(card, thumb, initialMutationId, mutations, pet);
 
@@ -222,4 +279,3 @@ function applyMutationStyle(card, thumbEl, mutationId, allMutations, pet) {
     }
   }
 }
-
